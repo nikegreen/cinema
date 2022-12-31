@@ -8,7 +8,7 @@ CREATE TABLE users (
 
 CREATE TABLE movies (
   id SERIAL PRIMARY KEY,
-  name text,
+  name text NOT NULL UNIQUE,
   filename text NOT NULL
 );
 

@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface UserRepository {
     List<User> findAll();
+
     Optional<User> add(User user);
+
     void update(User user);
+
     Optional<User> findById(int id);
+
     Optional<User> findByEmailAndPassword(String email, String password);
 }

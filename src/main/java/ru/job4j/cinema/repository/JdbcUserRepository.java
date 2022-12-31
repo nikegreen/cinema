@@ -27,6 +27,7 @@ public class JdbcUserRepository implements UserRepository {
     public JdbcUserRepository(BasicDataSource pool) {
         this.pool = pool;
     }
+
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
@@ -124,7 +125,6 @@ public class JdbcUserRepository implements UserRepository {
         }
         return result;
     }
-
 
     private User createUser(ResultSet it) throws SQLException {
         return new User(

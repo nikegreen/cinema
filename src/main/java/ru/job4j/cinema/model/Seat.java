@@ -9,15 +9,18 @@ public class Seat implements Serializable {
     private int row;
     private int cell;
 
+    private boolean empty;
+
     public Seat() {
 
     }
 
-    public Seat(int id, int roomId, int row, int cell) {
+    public Seat(int id, int roomId, int row, int cell, boolean empty) {
         this.id = id;
         this.roomId = roomId;
         this.row = row;
         this.cell = cell;
+        this.empty = empty;
     }
 
     public int getId() {
@@ -52,6 +55,14 @@ public class Seat implements Serializable {
         this.cell = cell;
     }
 
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -76,6 +87,7 @@ public class Seat implements Serializable {
                 + ", roomId=" + roomId
                 + ", row=" + row
                 + ", cell=" + cell
+                + ", empty=" + empty
                 + '}';
     }
 }

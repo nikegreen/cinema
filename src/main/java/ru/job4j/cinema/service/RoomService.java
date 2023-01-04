@@ -3,6 +3,8 @@ package ru.job4j.cinema.service;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.model.Room;
+import ru.job4j.cinema.model.Seat;
+import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.repository.JdbcRoomRepository;
 import ru.job4j.cinema.repository.RoomRepository;
 import java.util.List;
@@ -27,5 +29,25 @@ public class RoomService {
 
     public Optional<Room> findById(int id) {
         return store.findById(id);
+    }
+
+    public List<List<Seat>> getSeats(
+            int sessionId,
+            int roomId,
+            SeatService seatService,
+            TicketService ticketService) {
+        List<List<Seat>> result = seatService.getByRoomId(roomId);
+        List<Ticket> tickets = ticketService.findAllBySession(sessionId);
+        result.forEach(row -> row.forEach(seat -> seat.setEmpty(true)));
+        for (Ticket ticket: tickets) {
+            result.get(ticket.getRow()).forEach(
+                    seat -> {
+                        if (seat.getCell() == ticket.getCell()) {
+                            seat.setEmpty(false);
+                        }
+                    }
+            );
+        }
+        return result;
     }
 }

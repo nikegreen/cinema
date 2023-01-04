@@ -1,6 +1,8 @@
 package ru.job4j.cinema.filter;
 
 import org.springframework.stereotype.Component;
+import ru.job4j.cinema.model.User;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,10 +11,16 @@ import java.io.IOException;
 @Component
 public class AuthFilter implements Filter {
     private boolean isImage(String uri) {
-        int index = uri.lastIndexOf("images/images");
-        String i = uri.substring(index + 13, uri.length() - 4);
-        int res = Integer.valueOf(i);
-        return uri.endsWith(".jpg") && index >= 0 && res > 0;
+        int res = 0;
+        try {
+            int index = uri.lastIndexOf("images/images");
+            res = (index >= 0 &&  uri.endsWith(".jpg"))
+                ? Integer.valueOf(uri.substring(index + 13, uri.length() - 4)) : 0;
+
+        } catch (Exception e) {
+            res = 0;
+        }
+        return  res > 0;
     }
 
     @Override
@@ -23,7 +31,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String uri = req.getRequestURI();
-        if (uri.endsWith("loginPage")
+        if (uri.endsWith("formLogin")
                 || uri.endsWith("login")
                 || uri.endsWith("formLogin")
                 || uri.endsWith("registration")
@@ -38,8 +46,9 @@ public class AuthFilter implements Filter {
             chain.doFilter(req, res);
             return;
         }
-        if (req.getSession().getAttribute("user") == null) {
-            res.sendRedirect(req.getContextPath() + "/loginPage");
+        User user = (User) req.getSession().getAttribute("user");
+        if (user == null || user.getUsername() == "Гость") {
+            res.sendRedirect(req.getContextPath() + "/formLogin");
             return;
         }
         chain.doFilter(req, res);

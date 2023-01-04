@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Java spring examle. Service 'CINEMA'.">
+    <meta name="description" content="Кинотеатр job4j - сеансы.">
     <meta name="author" content="Nike Z.,Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Nike Z., Hugo 0.104.2">
     <title>Job4j cinema</title>
@@ -99,6 +99,17 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
         <strong>JOB4J</strong>
       </a>
+      <a class="navbar-brand d-flex align-items-center" th:if="${user.username == 'Гость'}" th:href="@{/formLogin}">
+        <span th:text="${user.username}+' '"></span>
+        <span> | Войти</span>
+      </a>
+      <a class="navbar-brand d-flex align-items-center" th:if="${user.username == 'Гость'}" th:href="@{/formRegistration}">
+        <span>Регистрация</span>
+      </a>
+      <a class="navbar-brand d-flex align-items-center" th:if="${user.username != 'Гость'}" th:href="@{/logout}">
+        <span th:text="${user.username}+' '"></span>
+        <span> | Выйти</span>
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -113,11 +124,6 @@
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Кинотеатр "JOB4J"</h1>
         <h2 class="fw-light">Расписание киносеансов.</h2>
-        <!-- <p class="lead text-muted">Расписание киносеансов.</p> -->
-        <p>
-          <a href="/formLogin" class="btn btn-primary my-2">Вход</a>
-          <a href="/formRegistration" class="btn btn-secondary my-2">Регистрация</a>
-        </p>
       </div>
     </div>
   </section>
@@ -138,7 +144,7 @@
               <p class="card-text" th:text="' Дата: '+${#temporals.format(cinemasession.start, 'dd-MM-yyyy')}"></p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a th:href="'formRow/'+${cinemasession.id}"><button type="button" class="btn btn-sm btn-outline-secondary">Купить билет</button></a>
+                  <a th:href="'/formRow/'+${cinemasession.id}"><button type="button" class="btn btn-sm btn-outline-secondary">Купить билет</button></a>
                 </div>
                 <small class="text-muted" th:text="'room:'+${cinemasession.room.name}"></small>
               </div>
@@ -157,7 +163,7 @@
       <a href="#">Наверх</a>
     </p>
     <p class="mb-1">Пример сервиса кинотеатр. &copy; Nike Z. Использовал Bootstrap, Java, Spring boot, thymeleaf.</p>
-    <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="../getting-started/introduction/">getting started guide</a>.</p>
+    <p class="mb-0">Предложения по работе - <a href="https://ekaterinburg.hh.ru/resume/a9f5ffddff01375f8a0039ed1f544d49736b74">посмотреть моё резюме</a> исходный текст проекта <a href="https://github.com/nikegreen/job4j_cinema">перейти на проект</a>.</p>
   </div>
 </footer>
 

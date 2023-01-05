@@ -4,6 +4,7 @@ import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
+import ru.job4j.cinema.model.User;
 import ru.job4j.cinema.repository.JdbcTicketRepository;
 import ru.job4j.cinema.repository.TicketRepository;
 
@@ -25,20 +26,42 @@ public class TicketService {
         this.sessionService = sessionService;
     }
 
-    List<Ticket> findAllBySession(int sessionId) {
+    public List<Ticket> findAllBySession(int sessionId) {
+        Session session = sessionService.findById(sessionId).orElse(null);
         List<Ticket> list = store.findAllBySession(sessionId);
         list.forEach(ticket -> {
-            ticket.setSession(sessionService.findById(ticket.getSession().getId()).orElse(null));
+            ticket.setSession(session);
             ticket.setUser(userService.findById(ticket.getUser().getId()).orElse(null));
         });
         return list;
     }
 
-    Optional<Ticket> add(Ticket ticket) {
+    public List<Ticket> findAllByUser(int userId) {
+        User user = userService.findById(userId).orElse(null);
+        List<Ticket> list = store.findAllByUser(userId);
+        list.forEach(ticket -> {
+            ticket.setSession(sessionService.findById(ticket.getSession().getId()).orElse(null));
+            ticket.setUser(user);
+        });
+        return list;
+    }
+
+    public List<Ticket> findAllBySessionAndUser(int sessionId, int userId) {
+        Session session = sessionService.findById(sessionId).orElse(null);
+        User user = userService.findById(userId).orElse(null);
+        List<Ticket> list = store.findAllBySessionAndUser(sessionId, userId);
+        list.forEach(ticket -> {
+            ticket.setSession(session);
+            ticket.setUser(user);
+        });
+        return list;
+    }
+
+    public Optional<Ticket> add(Ticket ticket) {
         return store.add(ticket);
     }
 
-    Optional<Ticket> findById(int id) {
+    public Optional<Ticket> findById(int id) {
         Ticket ticket = store.findById(id).orElse(null);
         ticket.setSession(sessionService.findById(ticket.getSession().getId()).orElse(null));
         ticket.setUser(userService.findById(ticket.getUser().getId()).orElse(null));

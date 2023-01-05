@@ -40,13 +40,16 @@ public class RoomService {
         List<Ticket> tickets = ticketService.findAllBySession(sessionId);
         result.forEach(row -> row.forEach(seat -> seat.setEmpty(true)));
         for (Ticket ticket: tickets) {
-            result.get(ticket.getRow()).forEach(
-                    seat -> {
-                        if (seat.getCell() == ticket.getCell()) {
-                            seat.setEmpty(false);
+            int row = ticket.getRow();
+            if (row > 0) {
+                result.get(row - 1).forEach(
+                        seat -> {
+                            if (seat.getCell() == ticket.getCell()) {
+                                seat.setEmpty(false);
+                            }
                         }
-                    }
-            );
+                );
+            }
         }
         return result;
     }

@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.job4j.cinema.model.Seat;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.service.RoomService;
 import ru.job4j.cinema.service.SeatService;
@@ -13,6 +14,7 @@ import ru.job4j.cinema.service.SessionService;
 import ru.job4j.cinema.service.TicketService;
 import ru.job4j.cinema.util.ModelSet;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @ThreadSafe
 @Controller
@@ -34,20 +36,22 @@ public class SessionController {
 
     @GetMapping("/formRow/{sessionId}")
     public String formRow(
-            Model model, HttpSession httpSession, @PathVariable("sessionId") int id
+            Model model, HttpSession httpSession, @PathVariable("sessionId") int sessionId
     ) {
         model = ModelSet.fromSession(model, httpSession);
-        Session cinemaSession = this.sessionService.findById(id).orElse(null);
-        model.addAttribute("cinemasession", cinemaSession);
-        model.addAttribute("seats",
-                roomService.getSeats(
-                        cinemaSession.getId(),
-                        cinemaSession.getRoom().getId(),
-                        seatService,
-                        ticketService
-                )
+        Session cinemaSession = this.sessionService.findById(sessionId).orElse(null);
+        httpSession.setAttribute("cinemasession", cinemaSession);
+        //model.addAttribute("cinemasession", cinemaSession);
+        List<List<Seat>> seats = roomService.getSeats(
+                cinemaSession.getId(),
+                cinemaSession.getRoom().getId(),
+                seatService,
+                ticketService
         );
-        model.addAttribute("row", 1);
+        //httpSession.setAttribute("seats", seats);
+        model.addAttribute("seats", seats);
+        //int rowIndex = (int) httpSession.getAttribute("row_index");
+        //model.addAttribute("row_index", rowIndex);
         return "row";
     }
 
@@ -55,12 +59,13 @@ public class SessionController {
     public String formCell(
             Model model,
             HttpSession httpSession,
-            @PathVariable("rowIndex") int rowIndex,
-            @RequestParam("session_id") int sessionId
+            @PathVariable("rowIndex") int rowIndex
+//            @RequestParam("session_id") int sessionId
     ) {
         model = ModelSet.fromSession(model, httpSession);
-        Session cinemaSession = this.sessionService.findById(sessionId).orElse(null);
-        model.addAttribute("cinemasession", cinemaSession);
+        Session cinemaSession = (Session) httpSession.getAttribute("cinemasession");
+                //Session cinemaSession = this.sessionService.findById(sessionId).orElse(null);
+        //model.addAttribute("cinemasession", cinemaSession);
         model.addAttribute("seats",
                 roomService.getSeats(
                         cinemaSession.getId(),
@@ -69,7 +74,7 @@ public class SessionController {
                         ticketService
                 )
         );
-        model.addAttribute("row_index", rowIndex);
+        httpSession.setAttribute("row_index", rowIndex);
         return "cell";
     }
 }

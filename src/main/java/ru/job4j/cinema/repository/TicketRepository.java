@@ -10,4 +10,8 @@ public interface TicketRepository {
     Optional<Ticket> add(Ticket ticket);
 
     Optional<Ticket> findById(int id);
+
+    List<Ticket> findAllByUser(int userId);
+
+    List<Ticket> findAllBySessionAndUser(int sessionId, int userId);
 }

@@ -22,7 +22,7 @@
     .horizont {
 	  display: inline-block; /*Задаем блочно-строчное отображение*/
   	  width: 3em; /*задаем ширину блока*/
-	  background: silver;
+	  background: dodgerblue;
 	}
   </style>
 </head>
@@ -74,7 +74,7 @@
         <div class="row pt-3">
             <div class="card" style="width: 100%">
                 <div class="card-header">
-                    Выбор места.
+                    Купить билет.
                 </div>
 
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -94,32 +94,51 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <form th:action="@{/createTicket}" method="POST">
+                                    <div class="row">
+                                        <button type="submit" class="btn btn-secondary" formmethod="get" th:formaction="@{/index}">Выбрать сеанс</button>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <button type="submit" class="btn btn-secondary" formmethod="get" th:formaction="@{/formRow}+'/'+${session.cinemasession.id}">Выбрать ряд</button>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <button type="submit" class="btn btn-secondary" formmethod="get" th:formaction="@{/formCell}+'/'+${session.row_index}">Выбрать место</button>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <button type="submit" class="btn btn-primary">Купить</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body">
                     <div class="row" th:each="seat : ${seats}">
-                            <div style="display: flex; flex-direction: row; align-content: flex-start;">
-                                <div style="flex-grow: 0; flex-shrink: 0; border: solid 1px; padding: 3px; width: 3em; text-align: center;" th:text="${seat.get(0).getRow()}">
-                                </div>
-                                <div style="flex-grow: 1; flex-shrink: 1; border: solid 1px; padding: 3px; text-align: center;">
-                                    <div class="horizont" th:each="cell : ${seat}">
-                                        <a th:href="'/formBuy/'+${cell.cell}"
-                                           th:if="${(cell.row==session.row_index)&&(cell.empty==true)&&(cell.cell>0)}">
-                                            <div style="width: 100%; height: 100%; background: dodgerblue;" th:if="${cell.row==session.row_index}">
-                                                <h4  th:if="${(cell.empty==true)&&(cell.cell>0)}" th:text="${cell.cell}"></h4>
-                                            </div>
-                                        </a>
-                                        <div style="width: 100%; height: 100%; background: silver;"
-                                             th:if="${(cell.row!=session.row_index)||(cell.empty!=true)||(cell.cell<=0)}">
-                                            <h4  th:if="${(cell.empty!=true)&&(cell.cell>0)}" text="--"></h4>
-                                            <h4  th:if="${(cell.empty==true)&&(cell.cell>0)}" th:text="${cell.cell}"></h4>
-                                        </div>
+                        <div style="display: flex; flex-direction: row; align-content: flex-start;">
+                            <div style="flex-grow: 0; flex-shrink: 0; border: solid 1px; padding: 3px; width: 3em; text-align: center;" th:text="${seat.get(0).getRow()}">
+                            </div>
+                            <div style="flex-grow: 1; flex-shrink: 1; border: solid 1px; padding: 3px; text-align: center;">
+                                <div class="horizont" th:each="cell : ${seat}">
+                                    <div style="width: 100%; height: 100%; background: green;" th:if="${(cell.row==session.row_index)&&(cell.cell==session.cell_index)}">
+                                        <h4  th:if="${(cell.empty!=true)&&(cell.cell>0)}" text="--"></h4>
+                                        <h4  th:if="${(cell.empty==true)&&(cell.cell>0)}" th:text="${cell.cell}"></h4>
+                                    </div>
+                                    <div style="width: 100%; height: 100%; background: silver;" th:if="${(cell.row!=session.row_index)||(cell.cell!=session.cell_index)}">
+                                        <h4  th:if="${(cell.empty!=true)&&(cell.cell>0)}" text="--"></h4>
+                                        <h4  th:if="${(cell.empty==true)&&(cell.cell>0)}" th:text="${cell.cell}"></h4>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

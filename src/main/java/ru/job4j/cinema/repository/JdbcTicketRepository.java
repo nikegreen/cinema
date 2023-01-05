@@ -17,7 +17,12 @@ import java.util.Optional;
 @Repository
 public class JdbcTicketRepository implements TicketRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcUserRepository.class);
-    private static final String SQL_FIND_ALL = "SELECT * FROM tickets WHERE session_id = ?";
+    private static final String SQL_FIND_ALL_BY_SESSION =
+            "SELECT * FROM tickets WHERE session_id = ?";
+    private static final String SQL_FIND_ALL_BY_USER =
+            "SELECT * FROM tickets WHERE user_id = ?";
+    private static final String SQL_FIND_ALL_BY_SESSION_AND_USER =
+            "SELECT * FROM tickets WHERE session_id = ? AND user_id = ?";
     private static final String SQL_ADD =
             "INSERT INTO tickets(session_id, pos_row, cell, user_id) VALUES (?,?,?,?)";
     //private static final String SQL_UPDATE =
@@ -37,7 +42,7 @@ public class JdbcTicketRepository implements TicketRepository {
     public List<Ticket> findAllBySession(int sessionId) {
         List<Ticket> tickets = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL)
+             PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL_BY_SESSION)
         ) {
             ps.setInt(1, sessionId);
             try (ResultSet it = ps.executeQuery()) {
@@ -92,6 +97,49 @@ public class JdbcTicketRepository implements TicketRepository {
             LOGGER.error("find user by id=" + id + ". " + e.getMessage(), e);
         }
         return result;
+    }
+
+    @Override
+    public List<Ticket> findAllByUser(int userId) {
+        List<Ticket> tickets = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL_BY_USER)
+        ) {
+            ps.setInt(1, userId);
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    tickets.add(
+                            createTicket(it)
+                    );
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("find all tickets where user id =" + userId + ". " + e.getMessage(), e);
+        }
+        return tickets;
+    }
+
+    @Override
+    public List<Ticket> findAllBySessionAndUser(int sessionId, int userId) {
+        List<Ticket> tickets = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL_BY_SESSION_AND_USER)
+        ) {
+            ps.setInt(1, sessionId);
+            ps.setInt(2, userId);
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    tickets.add(
+                            createTicket(it)
+                    );
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("find all tickets where user id =" + userId
+                    + " and session id=" + sessionId + ". "
+                    + e.getMessage(), e);
+        }
+        return tickets;
     }
 
     private Ticket createTicket(ResultSet it) throws SQLException {

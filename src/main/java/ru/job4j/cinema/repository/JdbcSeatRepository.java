@@ -30,7 +30,7 @@ public class JdbcSeatRepository implements SeatRepository {
                if (cells.isEmpty()) {
                    break;
                }
-               result.add(0, cells);
+               result.add(cells);
             }
         return result;
     }

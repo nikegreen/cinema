@@ -1,17 +1,17 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Кинотеатр job4j - сеансы.">
-    <meta name="author" content="Nike Z.,Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Nike Z., Hugo 0.104.2">
-    <title>Job4j cinema</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/album/">
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Кинотеатр job4j - сеансы.">
+  <meta name="author" content="Nike Z.,Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Nike Z., Hugo 0.104.2">
+  <title>Кинотеатр Job4j - билеты</title>
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/album/">
+  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
+  <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -71,9 +71,9 @@
       }
     </style>
 
-  </head>
-  <body>
-    
+</head>
+<body>
+
 <header>
   <div class="collapse bg-dark" id="navbarHeader">
     <div class="container">
@@ -110,11 +110,9 @@
         <span th:text="${user.username}+' '"></span>
         <span> | Выйти</span>
       </a>
-      <a class="navbar-brand d-flex align-items-center" th:if="${(user.username!='Гость')&&(session.cinemasession!=null)}" th:href="@{/formTickets}">
-        <span th:if="${(session.session_filtr==0)||(session.session_filtr==null)}">Купленные билеты на все сеансы</span>
-        <span th:if="${(session.session_filtr!=0)&&(session.session_filtr!=null)}" th:text="'Купленные билеты на киносеанс: '+${session.cinemasession.movie.name}"></span>
+      <a class="navbar-brand d-flex align-items-center" th:href="@{/index}">
+        <span>Киносеансы</span>
       </a>
-
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -128,7 +126,7 @@
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Кинотеатр "JOB4J"</h1>
-        <h2 class="fw-light">Расписание киносеансов.</h2>
+        <h2 class="fw-light">Список купленых билетов.</h2>
       </div>
     </div>
   </section>
@@ -137,21 +135,22 @@
     <div class="container">
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        <div class="col" th:each="cinemasession : ${cinemasessions}">
+        <div class="col" th:each="ticket : ${tickets}">
           <div class="card shadow-sm">
             <div class="bd-placeholder-img card-img-top" width="100%" height="225" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMinYMid slice" focusable="false">
-              <img th:src="'images/'+${cinemasession.movie.filename}" th:alt="${cinemasession.movie.name}" class="center">
+              <img th:src="'images/'+${ticket.session.movie.filename}" th:alt="${ticket.session.movie.name}" class="center">
               </img>
             </div>
             <div class="card-body">
-              <p class="card-text" th:text="'Фильм: '+${cinemasession.movie.name}"></p>
-              <p class="card-text" th:text="'Сеанс: '+${#temporals.format(cinemasession.start, 'HH:mm')}"></p>
-              <p class="card-text" th:text="' Дата: '+${#temporals.format(cinemasession.start, 'dd-MM-yyyy')}"></p>
+              <p class="card-text" th:text="'Фильм: '+${ticket.session.movie.name}"></p>
+              <p class="card-text" th:text="'Сеанс: '+${#temporals.format(ticket.session.start, 'HH:mm')}"></p>
+              <p class="card-text" th:text="' Дата: '+${#temporals.format(ticket.session.start, 'dd-MM-yyyy')}"></p>
               <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a th:href="'/formRow/'+${cinemasession.id}"><button type="button" class="btn btn-sm btn-outline-secondary">Купить билет</button></a>
+                <div class="btn-group" th:text="'ряд:'+${ticket.row}">
                 </div>
-                <small class="text-muted" th:text="'room:'+${cinemasession.room.name}"></small>
+                <div class="btn-group" th:text="'место:'+${ticket.cell}">
+                </div>
+                <small class="text-muted" th:text="'room:'+${ticket.session.room.name}"></small>
               </div>
             </div>
           </div>
@@ -172,7 +171,7 @@
   </div>
 </footer>
 
-    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  </body>
+</body>
 </html>

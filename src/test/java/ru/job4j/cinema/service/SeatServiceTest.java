@@ -1,4 +1,4 @@
-package ru.job4j.cinema.repository;
+package ru.job4j.cinema.service;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.jupiter.api.AfterAll;
@@ -6,13 +6,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.job4j.cinema.Main;
 import ru.job4j.cinema.model.Seat;
+import ru.job4j.cinema.repository.JdbcSeatRepository;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
-class JdbcSeatRepositoryTest {
+class SeatServiceTest {
     private static BasicDataSource dataSource;
 
     @BeforeAll
@@ -27,7 +27,11 @@ class JdbcSeatRepositoryTest {
 
     @Test
     public void whenGetByRoomId() {
-        SeatRepository seatRepository = new JdbcSeatRepository(dataSource);
+        JdbcSeatRepository seatRepository1 = new JdbcSeatRepository(dataSource);
+        assertThat(seatRepository1).isNotNull();
+        SeatService seatService = new SeatService(seatRepository1);
+        assertThat(seatService);
+
         final List<Seat> row1 = new ArrayList<>();
         row1.add(new Seat(1, 1, 1, 1, false));
         row1.add(new Seat(2, 1, 1, 2, false));
@@ -90,14 +94,18 @@ class JdbcSeatRepositoryTest {
         testSeats.add(row5);
         testSeats.add(row6);
 
-        List<List<Seat>> seats = seatRepository.getByRoomId(1);
+        List<List<Seat>> seats = seatService.getByRoomId(1);
         assertThat(seats).isNotNull();
         assertThat(seats).isEqualTo(testSeats);
     }
 
     @Test
     public void whenGetByRoomIdAndRow() {
-        SeatRepository seatRepository = new JdbcSeatRepository(dataSource);
+        JdbcSeatRepository seatRepository1 = new JdbcSeatRepository(dataSource);
+        assertThat(seatRepository1).isNotNull();
+        SeatService seatService = new SeatService(seatRepository1);
+        assertThat(seatService);
+
         final List<Seat> row1 = new ArrayList<>();
         row1.add(new Seat(1, 1, 1, 1, false));
         row1.add(new Seat(2, 1, 1, 2, false));
@@ -152,27 +160,27 @@ class JdbcSeatRepositoryTest {
         row6.add(new Seat(41, 1, 6, 7, false));
         row6.add(new Seat(42, 1, 6, 8, false));
 
-        List<Seat> seats1 = seatRepository.getByRoomIdAndRow(1, 1);
+        List<Seat> seats1 = seatService.getByRoomIdAndRow(1, 1);
         assertThat(seats1).isNotNull();
         assertThat(seats1).isEqualTo(row1);
 
-        List<Seat> seats2 = seatRepository.getByRoomIdAndRow(1, 2);
+        List<Seat> seats2 = seatService.getByRoomIdAndRow(1, 2);
         assertThat(seats2).isNotNull();
         assertThat(seats2).isEqualTo(row2);
 
-        List<Seat> seats3 = seatRepository.getByRoomIdAndRow(1, 3);
+        List<Seat> seats3 = seatService.getByRoomIdAndRow(1, 3);
         assertThat(seats3).isNotNull();
         assertThat(seats3).isEqualTo(row3);
 
-        List<Seat> seats4 = seatRepository.getByRoomIdAndRow(1, 4);
+        List<Seat> seats4 = seatService.getByRoomIdAndRow(1, 4);
         assertThat(seats4).isNotNull();
         assertThat(seats4).isEqualTo(row4);
 
-        List<Seat> seats5 = seatRepository.getByRoomIdAndRow(1, 5);
+        List<Seat> seats5 = seatService.getByRoomIdAndRow(1, 5);
         assertThat(seats5).isNotNull();
         assertThat(seats5).isEqualTo(row5);
 
-        List<Seat> seats6 = seatRepository.getByRoomIdAndRow(1, 6);
+        List<Seat> seats6 = seatService.getByRoomIdAndRow(1, 6);
         assertThat(seats6).isNotNull();
         assertThat(seats6).isEqualTo(row6);
     }

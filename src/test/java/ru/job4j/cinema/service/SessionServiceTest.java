@@ -1,4 +1,4 @@
-package ru.job4j.cinema.repository;
+package ru.job4j.cinema.service;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.jupiter.api.AfterAll;
@@ -9,6 +9,7 @@ import ru.job4j.cinema.Main;
 import ru.job4j.cinema.model.Movie;
 import ru.job4j.cinema.model.Room;
 import ru.job4j.cinema.model.Session;
+import ru.job4j.cinema.repository.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-class JdbcSessionRepositoryTest {
+class SessionServiceTest {
     private static BasicDataSource dataSource;
 
     @BeforeAll
@@ -40,18 +41,26 @@ class JdbcSessionRepositoryTest {
 
     @Test
     public void whenCreateSessionAndFindByIdAndFindAll() {
-        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
-        Movie movie = movieRepository.findById(1).orElse(null);
+        MovieService movieService = new MovieService(new JdbcMovieRepository(dataSource));
+        Movie movie = movieService.findById(1).orElse(null);
         assertThat(movie).isNotNull();
         assertThat(movie.getName()).isEqualTo("непослушник2");
         assertThat(movie.getFilename()).isEqualTo("images1.jpg");
 
-        RoomRepository roomRepository = new JdbcRoomRepository(dataSource);
-        Room room = roomRepository.findById(1).orElse(null);
+        RoomService roomService = new RoomService(new JdbcRoomRepository(dataSource));
+        Room room = roomService.findById(1).orElse(null);
         assertThat(room).isNotNull();
+        assertThat(room.getName()).isEqualTo("малый зал");
 
         LocalDateTime start = LocalDateTime.of(2023,1,1,11,0,0);
-        SessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
+        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
+        assertThat(sessionRepository).isNotNull();
+        SessionService sessionService = new SessionService(
+                sessionRepository,
+                movieService,
+                roomService
+        );
+
         Session session = new Session(0, "name1", movie, room, start);
         assertThat(session).isNotNull();
         assertThat(session.getName()).isEqualTo("name1");
@@ -59,22 +68,22 @@ class JdbcSessionRepositoryTest {
         assertThat(session.getRoom()).isEqualTo(room);
         assertThat(session.getStart()).isEqualTo(start);
 
-        List<Session> sessions = sessionRepository.findAll();
+        List<Session> sessions = sessionService.findAll();
         assertThat(sessions).isNotNull();
         int count = sessions.size();
 
-        Session sessionDb1 = sessionRepository.add(session).orElse(null);
+        Session sessionDb1 = sessionService.add(session).orElse(null);
         assertThat(sessionDb1).isNotNull();
         assertThat(sessionDb1.getName()).isEqualTo("name1");
         assertThat(sessionDb1.getMovie()).isEqualTo(movie);
         assertThat(sessionDb1.getRoom()).isEqualTo(room);
         assertThat(sessionDb1.getStart()).isEqualTo(start);
 
-        sessions = sessionRepository.findAll();
+        sessions = sessionService.findAll();
         assertThat(sessions).isNotNull();
         assertThat(sessions.size()).isEqualTo(count+1);
 
-        Session sessionDb2 = sessionRepository.findById(sessionDb1.getId()).orElse(null);
+        Session sessionDb2 = sessionService.findById(sessionDb1.getId()).orElse(null);
         assertThat(sessionDb2).isNotNull();
         assertThat(sessionDb2.getId()).isEqualTo(sessionDb1.getId());
         assertThat(sessionDb2.getName()).isEqualTo("name1");

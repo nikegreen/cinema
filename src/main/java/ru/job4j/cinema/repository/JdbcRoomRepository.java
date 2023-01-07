@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public class JdbcRoomRepository implements RoomRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcRoomRepository.class);
-    private static final String SQL_FIND_ALL = "SELECT * FROM rooms";
+    private static final String SQL_FIND_ALL = "SELECT * FROM rooms ORDER BY id";
     private static final String SQL_ADD =
             "INSERT INTO rooms(name) VALUES (?)";
     //private static final String SQL_UPDATE =
@@ -55,7 +55,7 @@ public class JdbcRoomRepository implements RoomRepository {
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
-                    room.setId(id.getInt(1));
+                    room.setId(id.getInt("id"));
                     result = Optional.of(room);
                 }
             }

@@ -71,12 +71,12 @@ public class JdbcTicketRepository implements TicketRepository {
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
-                    ticket.setId(id.getInt(1));
+                    ticket.setId(id.getInt("id"));
                     result = Optional.of(ticket);
                 }
             }
         } catch (Exception e) {
-            LOGGER.error("add user=" + ticket + ". " + e.getMessage(), e);
+            LOGGER.error("add ticket=" + ticket + ". " + e.getMessage(), e);
         }
         return result;
     }

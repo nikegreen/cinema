@@ -17,13 +17,8 @@ public class JdbcMovieRepository implements MovieRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcRoomRepository.class);
     private static final String SQL_FIND_ALL = "SELECT * FROM movies";
     private static final String SQL_ADD =
-            "INSERT INTO movies(name) VALUES (?)";
-    private static final String SQL_UPDATE =
-            "UPDATE movies SET name=? WHERE id = ?";
+            "INSERT INTO movies(name, filename) VALUES (?,?)";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM movies WHERE id = ?";
-
-    //private static final String SQL_FIND_BY_EMAIL_PASSWORD =
-    //        "SELECT * FROM movies WHERE email = ? AND password = ?";
 
     private final BasicDataSource pool;
 
@@ -59,7 +54,7 @@ public class JdbcMovieRepository implements MovieRepository {
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
-                    movie.setId(id.getInt(1));
+                    movie.setId(id.getInt("id"));
                     result = Optional.of(movie);
                 }
             }

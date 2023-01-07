@@ -31,24 +31,40 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String registration(Model model, @ModelAttribute User user) {
+    public String registration(@ModelAttribute User user) {
         Optional<User> regUser = userService.add(user);
         if (!regUser.isPresent()) {
-            return "redirect:/fail";
+            return "redirect:/fail?username=" + user.getUsername()
+                    + "&email=" + user.getEmail()
+                    + "&phone=" + user.getPhone();
         }
-        model.addAttribute("user", regUser);
-        return "redirect:/success";
+        user = regUser.orElse(null);
+        return "redirect:/success?username=" + user.getUsername()
+                + "&email=" + user.getEmail()
+                + "&phone=" + user.getPhone();
     }
 
     @GetMapping("/success")
-    public String success(Model model, @ModelAttribute User user) {
-        model.addAttribute("user", user);
+    public String success(Model model, HttpSession session,
+                          @RequestParam(name = "username") String username,
+                          @RequestParam(name = "email") String email,
+                          @RequestParam(name = "phone") String phone
+    ) {
+        model = ModelSet.fromSession(model, session);
+        model.addAttribute("reg_user", new User(0, username, "", email, phone));
         return "success";
     }
 
     @GetMapping("/fail")
-    public String fail(Model model) {
+    public String fail(Model model,
+                       HttpSession session,
+                       @RequestParam(name = "username") String username,
+                       @RequestParam(name = "email") String email,
+                       @RequestParam(name = "phone") String phone
+    ) {
+        model = ModelSet.fromSession(model, session);
         model.addAttribute("message", "Пользователь с такой почтой уже существует");
+        model.addAttribute("reg_user", new User(0, username, "", email, phone));
         return "fail";
     }
 

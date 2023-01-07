@@ -60,7 +60,7 @@ public class JdbcUserRepository implements UserRepository {
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
-                    user.setId(id.getInt(1));
+                    user.setId(id.getInt("id"));
                     result = Optional.of(user);
                 }
             }

@@ -15,7 +15,7 @@ import java.util.List;
 public class JdbcSeatRepository implements SeatRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcSeatRepository.class);
     private static final String SQL_FIND_BY_ROOM_ID_AND_ROW =
-            "SELECT * FROM seats WHERE room_id = ? and row = ? ORDER BY (id, row, cell)";
+            "SELECT * FROM seats WHERE room_id = ? and pos_row = ? ORDER BY (id, pos_row, cell)";
     private final BasicDataSource pool;
 
     public JdbcSeatRepository(BasicDataSource pool) {
@@ -66,7 +66,7 @@ public class JdbcSeatRepository implements SeatRepository {
         return new Seat(
                 it.getInt("id"),
                 it.getInt("room_id"),
-                it.getInt("row"),
+                it.getInt("pos_row"),
                 cell,
                 false
         );

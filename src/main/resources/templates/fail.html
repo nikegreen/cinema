@@ -18,34 +18,74 @@
     <title>Ошибка регистрации</title>
 </head>
 <body>
-<div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Работа мечты</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" th:href="@{/index}">Главная</a>
-            </div>
-        </div>
-    </nav>
-    <div class="row pt-3">
-        <div class="card" style="width: 100%">
-            <div class="card-header">
-                Ошибка регистрации пользователя.
-            </div>
-            <div class="card-body">
-                <form th:action="@{/formRegistration}" method="GET">
-                    <div class="form-group">
-                    Регистрация не удалась. Эта почта занята другим пользователем.<br>
-                        <input type="text" class="form-control" id="message" name="message" th:value="${message}" />
-                    </div>
-                    <button type="submit" class="btn btn-primary">OK</button>
-                </form>
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                    <h4 class="text-white">О сайте</h4>
+                    <p class="text-muted">Сайт для покупки билетов в кинотеатр. Написан на java. Использует spring boot, bootstrap, thymeleaf, postgresql.</p>
+                </div>
+                <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Контакты</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Переходите на Twitter</a></li>
+                        <li><a href="#" class="text-white">Переходите на Facebook</a></li>
+                        <li><a href="#" class="text-white">Напишите на Email</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <strong>JOB4J</strong>
+            </a>
+            <a class="navbar-brand d-flex align-items-center" th:if="${(user==null)||(user.username == 'Гость')}" th:href="@{/formLogin}">
+                <span >Гость </span>
+                <span> | Войти</span>
+            </a>
+            <a class="navbar-brand d-flex align-items-center" th:if="${(user!=null)&&(user.username != 'Гость')}" th:href="@{/logout}">
+                <span th:text="${user.username}+' '"></span>
+                <span> | Выйти</span>
+            </a>
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/index}">
+                <span>Киносеансы</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <div class="row pt-3">
+            <div class="card" style="width: 100%">
+                <div class="card-header">
+                    Ошибка регистрации пользователя.
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/formRegistration}" method="GET">
+                        <div class="form-group" th:if="${reg_user==null}" th:text="'Регистрация пользователя не удалась.<br>'">
+                        </div>
+                        <div class="form-group" th:if="${reg_user!=null}" th:text="'Регистрация пользователя ('+${reg_user.username}+') не удалась.<br>'">
+                        </div>
+                        <div class="form-group" th:if="${reg_user!=null}" th:text="'Почта ('+${reg_user.email}+') занята другим пользователем.<br>'">
+                        </div>
+                        <div class="form-group" th:if="${reg_user!=null}" th:text="'Или номер телефона ('+${reg_user.phone}+') занят другим пользователем.<br>'">
+                        </div>
+                        <div class="form-group" th:if="${reg_user!=null}" th:text="'Регистрация не удалась. Почта ('+${reg_user.email}+') занята другим пользователем.<br>'">
+                            <input type="text" class="form-control" id="message" name="message" th:if="${message!=null}" th:value="${message}" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">OK</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>

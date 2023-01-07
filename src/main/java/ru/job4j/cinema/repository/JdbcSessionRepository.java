@@ -59,7 +59,7 @@ public class JdbcSessionRepository implements SessionRepository {
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
-                    session.setId(id.getInt(1));
+                    session.setId(id.getInt("id"));
                     result = Optional.of(session);
                 }
             }

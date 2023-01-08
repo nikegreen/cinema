@@ -14,7 +14,7 @@ import java.util.Properties;
  * <p>Main class. Minimal Sping boot application</p>
  * 1. run application.
  * 2. in web browser open page "http://localhost:8080/index".
- * @author nikez
+ * @author nike z
  * @version $Id: $Id
  */
 @SpringBootApplication

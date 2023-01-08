@@ -12,11 +12,9 @@ import ru.job4j.cinema.model.User;
 import ru.job4j.cinema.service.RoomService;
 import ru.job4j.cinema.service.SeatService;
 import ru.job4j.cinema.service.TicketService;
-import ru.job4j.cinema.service.UserService;
 import ru.job4j.cinema.util.ModelSet;
 
 import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +35,7 @@ public class TicketController {
     }
 
     @GetMapping("/formBuy/{cellIndex}")
-    public String formCell(
+    public String formBuy(
             Model model,
             HttpSession httpSession,
             @PathVariable("cellIndex") int cellIndex
@@ -80,21 +78,14 @@ public class TicketController {
             httpSession.setAttribute("session_filtr", cinemaSession.getId());
             return "redirect:/formTickets";
         }
-        return "redirect:/index";
+        return "redirect:/formBuyFail";
     }
 
     @GetMapping("/formTickets")
-    public String formCell(Model model, HttpSession httpSession) {
+    public String formTickets(Model model, HttpSession httpSession) {
         model = ModelSet.fromSession(model, httpSession);
         Session cinemaSession = (Session) httpSession.getAttribute("cinemasession");
         User user = (User) httpSession.getAttribute("user");
-        model.addAttribute(
-                "tickets",
-                ticketService.findAllBySessionAndUser(
-                        cinemaSession.getId(),
-                        user.getId()
-                )
-        );
         int sessionFiltr = Optional.ofNullable(
                 (Integer) httpSession.getAttribute("session_filtr"))
                 .orElse(0)
@@ -107,5 +98,11 @@ public class TicketController {
         }
         model.addAttribute("tickets", tickets);
         return "tickets";
+    }
+
+    @GetMapping("/formBuyFail")
+    public String formBuyFail(Model model, HttpSession session) {
+        model = ModelSet.fromSession(model, session);
+        return "buyFail";
     }
 }

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.cinema.model.Seat;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.service.RoomService;
@@ -40,18 +39,17 @@ public class SessionController {
     ) {
         model = ModelSet.fromSession(model, httpSession);
         Session cinemaSession = this.sessionService.findById(sessionId).orElse(null);
+        if (cinemaSession == null) {
+            return "redirect:/index";
+        }
         httpSession.setAttribute("cinemasession", cinemaSession);
-        //model.addAttribute("cinemasession", cinemaSession);
         List<List<Seat>> seats = roomService.getSeats(
                 cinemaSession.getId(),
                 cinemaSession.getRoom().getId(),
                 seatService,
                 ticketService
         );
-        //httpSession.setAttribute("seats", seats);
         model.addAttribute("seats", seats);
-        //int rowIndex = (int) httpSession.getAttribute("row_index");
-        //model.addAttribute("row_index", rowIndex);
         return "row";
     }
 
@@ -60,12 +58,9 @@ public class SessionController {
             Model model,
             HttpSession httpSession,
             @PathVariable("rowIndex") int rowIndex
-//            @RequestParam("session_id") int sessionId
     ) {
         model = ModelSet.fromSession(model, httpSession);
         Session cinemaSession = (Session) httpSession.getAttribute("cinemasession");
-                //Session cinemaSession = this.sessionService.findById(sessionId).orElse(null);
-        //model.addAttribute("cinemasession", cinemaSession);
         model.addAttribute("seats",
                 roomService.getSeats(
                         cinemaSession.getId(),

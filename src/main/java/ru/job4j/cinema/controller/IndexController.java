@@ -34,17 +34,4 @@ public class IndexController {
         model.addAttribute("cinemasessions", sessionService.findAll());
         return "index";
     }
-
-    /*
-    @GetMapping("/image/{candidateId}")
-    public ResponseEntity<Resource> photoCandidate(
-            @PathVariable("candidateId") Integer candidateId) {
-        Candidate candidate = candidateService.findById(candidateId);
-        return ResponseEntity.ok()
-                .headers(new HttpHeaders())
-                .contentLength(candidate.getPhoto().length)
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(new ByteArrayResource(candidate.getPhoto()));
-    }
-     */
 }

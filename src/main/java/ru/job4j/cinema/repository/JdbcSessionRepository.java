@@ -11,17 +11,11 @@ import java.util.Optional;
 
 @Repository
 public class JdbcSessionRepository implements SessionRepository {
-
     private static final Logger LOGGER = Logger.getLogger(JdbcSessionRepository.class);
     private static final String SQL_FIND_ALL = "SELECT * FROM sessions";
     private static final String SQL_ADD =
             "INSERT INTO sessions(name, movie_id, room_id, start) VALUES (?,?,?,?)";
-    //private static final String SQL_UPDATE =
-    //        "UPDATE sessions SET name=?, movie_id=?, room_id=?, start=? WHERE id = ?";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM sessions WHERE id = ?";
-
-    //private static final String SQL_FIND_BY_EMAIL_PASSWORD =
-    //        "SELECT * FROM sessions WHERE email = ? AND password = ?";
 
     private final BasicDataSource pool;
 

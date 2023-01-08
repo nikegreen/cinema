@@ -15,12 +15,7 @@ public class JdbcRoomRepository implements RoomRepository {
     private static final String SQL_FIND_ALL = "SELECT * FROM rooms ORDER BY id";
     private static final String SQL_ADD =
             "INSERT INTO rooms(name) VALUES (?)";
-    //private static final String SQL_UPDATE =
-    //        "UPDATE rooms SET name=? WHERE id = ?";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM rooms WHERE id = ?";
-
-    //private static final String SQL_FIND_BY_EMAIL_PASSWORD =
-    //        "SELECT * FROM rooms WHERE email = ? AND password = ?";
 
     private final BasicDataSource pool;
 

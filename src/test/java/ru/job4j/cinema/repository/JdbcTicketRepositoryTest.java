@@ -51,8 +51,6 @@ class JdbcTicketRepositoryTest {
         TicketRepository store = new JdbcTicketRepository(dataSource);
         UserRepository userRepository = new JdbcUserRepository(dataSource);
         User user = userRepository.findById(1).orElse(null);
-//                .add(new User(0, "user1", "password", "user1@email.ru", "+79990001001"))
-//                .orElse(null);
         assertThat(user).isNotNull();
         Ticket ticket = new Ticket(1, session, 1, 1, user);
         ticket = store.add(ticket).orElse(null);
@@ -76,8 +74,6 @@ class JdbcTicketRepositoryTest {
                 .isEqualTo(LocalDateTime.of(2023,1,8,9,5, 0));
         UserRepository userRepository = new JdbcUserRepository(dataSource);
         User user1 = userRepository.findById(1).orElse(null);
-//                .add(new User(0, "user1", "password", "user1@email.ru", "+79990001001"))
-//                .orElse(null);
         assertThat(user1).isNotNull();
         TicketRepository store = new JdbcTicketRepository(dataSource);
         Ticket ticket1 = new Ticket(1, session, 1, 1, user1);
@@ -125,8 +121,6 @@ class JdbcTicketRepositoryTest {
                 .isEqualTo(LocalDateTime.of(2023,1,8,9,5, 0));
         UserRepository userRepository = new JdbcUserRepository(dataSource);
         User user1 = userRepository.findById(1).orElse(null);
-//                .add(new User(0, "user1", "password", "user1@email.ru", "+79990001001"))
-//                .orElse(null);
         assertThat(user1).isNotNull();
         TicketRepository store = new JdbcTicketRepository(dataSource);
         List<Ticket> tickets = store.findAllBySession(session.getId());
@@ -178,8 +172,6 @@ class JdbcTicketRepositoryTest {
                 .isEqualTo(LocalDateTime.of(2023,1,8,9,5, 0));
         UserRepository userRepository = new JdbcUserRepository(dataSource);
         User user1 = userRepository.findById(1).orElse(null);
-//                .add(new User(0, "user1", "password", "user1@email.ru", "+79990001001"))
-//                .orElse(null);
         assertThat(user1).isNotNull();
         TicketRepository store = new JdbcTicketRepository(dataSource);
         List<Ticket> tickets = store.findAllByUser(user1.getId());
@@ -235,8 +227,6 @@ class JdbcTicketRepositoryTest {
                 .isEqualTo(LocalDateTime.of(2023,1,8,9,5, 0));
         UserRepository userRepository = new JdbcUserRepository(dataSource);
         User user1 = userRepository.findById(1).orElse(null);
-//                .add(new User(0, "user1", "password", "user1@email.ru", "+79990001001"))
-//                .orElse(null);
         assertThat(user1).isNotNull();
         TicketRepository store = new JdbcTicketRepository(dataSource);
         List<Ticket> tickets = store.findAllBySessionAndUser(session.getId(), user1.getId());

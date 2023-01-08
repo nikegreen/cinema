@@ -38,13 +38,9 @@ public class TicketController {
     public String formBuy(
             Model model,
             HttpSession httpSession,
-            @PathVariable("cellIndex") int cellIndex
-//            @RequestParam("session_id") int sessionId
-    ) {
+            @PathVariable("cellIndex") int cellIndex) {
         model = ModelSet.fromSession(model, httpSession);
         Session cinemaSession = (Session) httpSession.getAttribute("cinemasession");
-        //Session cinemaSession = this.sessionService.findById(sessionId).orElse(null);
-        //model.addAttribute("cinemasession", cinemaSession);
         model.addAttribute("seats",
                 roomService.getSeats(
                         cinemaSession.getId(),

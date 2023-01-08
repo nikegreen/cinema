@@ -25,12 +25,7 @@ public class JdbcTicketRepository implements TicketRepository {
             "SELECT * FROM tickets WHERE session_id = ? AND user_id = ?";
     private static final String SQL_ADD =
             "INSERT INTO tickets(session_id, pos_row, cell, user_id) VALUES (?,?,?,?)";
-    //private static final String SQL_UPDATE =
-    //        "UPDATE tickets SET session_id=?, pos_row=?, cell=?, user_id=? WHERE id = ?";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM tickets WHERE id = ?";
-
-    //private static final String SQL_FIND_BY_EMAIL_PASSWORD =
-    //        "SELECT * FROM tickets WHERE email = ? AND password = ?";
 
     private final BasicDataSource pool;
 

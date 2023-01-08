@@ -18,7 +18,6 @@ public class JdbcUserRepository implements UserRepository {
     private static final String SQL_UPDATE =
             "UPDATE users SET username=?, password=?, email=?, phone=? WHERE id = ?";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM users WHERE id = ?";
-
     private static final String SQL_FIND_BY_EMAIL_PASSWORD =
             "SELECT * FROM users WHERE email = ? AND password = ?";
 

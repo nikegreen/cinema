@@ -23,12 +23,13 @@ public class Main {
 
     private Properties loadDbProperties() {
         Properties cfg = new Properties();
-        try (BufferedReader io = new BufferedReader(
+        try (BufferedReader io =
+            new BufferedReader(
                 new InputStreamReader(
-                        Main.class.getClassLoader()
-                                .getResourceAsStream("db.properties")
+                    Main.class.getClassLoader().getResourceAsStream("db.properties")
                 )
-        )) {
+            )
+        ) {
             cfg.load(io);
         } catch (Exception e) {
             LOGGER.error("load 'db.properties'." + e.getMessage(), e);

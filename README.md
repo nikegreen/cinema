@@ -77,14 +77,13 @@ psql (15.1)
 
 postgres=# create database cinema;
  ``` 
-### 3. Создание таблиц и инициализация таблиц 
-В папке "job4j_cinema\db\script" нужно выполнить последовательно 2 скрипта:<br>
-
-#### 3.1 Создание таблиц
- 001_ddl_create_users_sessions_tickets_rooms_seats_movies_table.sql <br>
-
-#### 3.2 Инициализация таблиц
- 002_dml_insert_users_rooms_seats_movies_sessions.sql
+### 3. Подготовка  таблиц к созданию и инициализации 
+В папке "job4j_cinema\db\script" нужно выполнить последовательно скрипты с помощью
+liquibase (пункт 5). 
+Перед выполнением скриптов нужно очистить контрольные суммы командой:<br>
+```
+mvn liquibase:clearCheckSums
+```
 
 ### 4. Настройка конфигурации БД в Job4j_cinema
 В папке "job4j_cinema\srс\main\resources" в текстовом редакторе измените настройки в файле "db.properties".
@@ -96,13 +95,11 @@ jdbc.password=password
 ```
 если у вас они отличаются.
 
-### 5. Компиляция.
+### 5. Компиляция и запуск сервиса.
 ```
-mvn clean
-mvn compile
-mvn test
+mvn spring-boot:run
 ```
-### 6. Запуск сервиса.
+### 6. Запуск сервиса без сборки.
 ```
 cd c:\job4j_cinema\target
 java -jar job4j_cinema-1.0-SNAPSHOT.jar 

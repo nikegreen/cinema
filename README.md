@@ -15,19 +15,33 @@
 Если покупка не удалась, предупредить покупателя.
 Приложение должно состоять из 3х слоёв: Controller, Service, Persistence.
 База данных содержать 3 таблицы: users, sessions, tickets.
-users - таблица с описанием пользователей.
-sessions - расписание киносеансов.
-tickets - список купленных билетов.
-movies - список кинофильмов.
-room - список залов.
+- users - таблица с описанием пользователей.
+- sessions - расписание киносеансов.
+- tickets - список купленных билетов.
+- movies - список кинофильмов.
+- room - список залов.
 В таблице tickets созданы ограничения на уникальность полей:
 киносеанс, номер ряда, номер места.
 В таблице room - хранится список залов. В кинотеатре может быть несколько залов.
 
 ## Технологии: 
-В проекте использованы: git, java 17, СУБД PostgreSQL 14, Spring boot, JUnit 5, assertj, 
-mockito, liquibase 3.6.2, h2database 2.1.214, Maven 3.8, thymeleaf, checkstyle, 
-log4j, net.jcip, commons-dbcp2 2.7.0, IntelliJ IDEA 2022.3.1 (Community Edition).
+В проекте использованы:
+- git, 
+- java 17,
+- СУБД PostgreSQL 14,
+- Spring boot,
+- JUnit 5,
+- assertj,
+- mockito, 
+- liquibase 3.6.2, 
+- h2database 2.1.214,
+- Maven 3.8,
+- thymeleaf,
+- checkstyle,
+- log4j,
+- net.jcip,
+- commons-dbcp2 2.7.0,
+- IntelliJ IDEA 2022.3.1 (Community Edition).
 
 ## Список ПО:
 ### - git

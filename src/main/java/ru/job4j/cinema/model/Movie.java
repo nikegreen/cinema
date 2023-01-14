@@ -1,9 +1,8 @@
 package ru.job4j.cinema.model;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class Movie implements Serializable {
+public class Movie {
     private int id;
     private String name;
     private String filename;

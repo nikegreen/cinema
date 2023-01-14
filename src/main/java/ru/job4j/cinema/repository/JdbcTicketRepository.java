@@ -27,16 +27,16 @@ public class JdbcTicketRepository implements TicketRepository {
             "INSERT INTO tickets(session_id, pos_row, cell, user_id) VALUES (?,?,?,?)";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM tickets WHERE id = ?";
 
-    private final BasicDataSource pool;
+    private final BasicDataSource dataSource;
 
-    public JdbcTicketRepository(BasicDataSource pool) {
-        this.pool = pool;
+    public JdbcTicketRepository(BasicDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
     public List<Ticket> findAllBySession(int sessionId) {
         List<Ticket> tickets = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL_BY_SESSION)
         ) {
             ps.setInt(1, sessionId);
@@ -56,7 +56,7 @@ public class JdbcTicketRepository implements TicketRepository {
     @Override
     public Optional<Ticket> add(Ticket ticket) {
         Optional<Ticket> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(
                      SQL_ADD, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, ticket.getSession().getId());
@@ -79,7 +79,7 @@ public class JdbcTicketRepository implements TicketRepository {
     @Override
     public Optional<Ticket> findById(int id) {
         Optional<Ticket> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_BY_ID)
         ) {
             ps.setInt(1, id);
@@ -97,7 +97,7 @@ public class JdbcTicketRepository implements TicketRepository {
     @Override
     public List<Ticket> findAllByUser(int userId) {
         List<Ticket> tickets = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL_BY_USER)
         ) {
             ps.setInt(1, userId);
@@ -117,7 +117,7 @@ public class JdbcTicketRepository implements TicketRepository {
     @Override
     public List<Ticket> findAllBySessionAndUser(int sessionId, int userId) {
         List<Ticket> tickets = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL_BY_SESSION_AND_USER)
         ) {
             ps.setInt(1, sessionId);

@@ -5,20 +5,28 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import ru.job4j.cinema.Main;
+import ru.job4j.cinema.configuration.DataSourceConfiguration;
 import ru.job4j.cinema.model.Room;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
+@Configuration
+@PropertySource("classpath:db.properties")
 class JdbcRoomRepositoryTest {
     private static BasicDataSource dataSource;
 
     @BeforeAll
-    public static void initConnection() {
-        dataSource = new Main().loadPool();
+    public static void initConnection(@Value("${jdbc.driver}") String driver,
+                                      @Value("${jdbc.url}") String url,
+                                      @Value("${jdbc.username}") String username,
+                                      @Value("${jdbc.password}") String password) {
+        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
     }
 
     @AfterAll

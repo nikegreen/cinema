@@ -17,16 +17,16 @@ public class JdbcSessionRepository implements SessionRepository {
             "INSERT INTO sessions(name, movie_id, room_id, start) VALUES (?,?,?,?)";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM sessions WHERE id = ?";
 
-    private final BasicDataSource pool;
+    private final BasicDataSource dataSource;
 
-    public JdbcSessionRepository(BasicDataSource pool) {
-        this.pool = pool;
+    public JdbcSessionRepository(BasicDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
     public List<Session> findAll() {
         List<Session> sessions = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL)
         ) {
             try (ResultSet it = ps.executeQuery()) {
@@ -43,7 +43,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Optional<Session> add(Session session) {
         Optional<Session> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(
                      SQL_ADD, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, session.getName());
@@ -66,7 +66,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Optional<Session> findById(int id) {
         Optional<Session> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_BY_ID)
         ) {
             ps.setInt(1, id);

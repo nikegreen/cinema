@@ -20,16 +20,16 @@ public class JdbcMovieRepository implements MovieRepository {
             "INSERT INTO movies(name, filename) VALUES (?,?)";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM movies WHERE id = ?";
 
-    private final BasicDataSource pool;
+    private final BasicDataSource dataSource;
 
-    public JdbcMovieRepository(BasicDataSource pool) {
-        this.pool = pool;
+    public JdbcMovieRepository(BasicDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
     public List<Movie> findAll() {
         List<Movie> movies = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL)
         ) {
             try (ResultSet it = ps.executeQuery()) {
@@ -46,7 +46,7 @@ public class JdbcMovieRepository implements MovieRepository {
     @Override
     public Optional<Movie> add(Movie movie) {
         Optional<Movie> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(
                      SQL_ADD, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, movie.getName());
@@ -67,7 +67,7 @@ public class JdbcMovieRepository implements MovieRepository {
     @Override
     public Optional<Movie> findById(int id) {
         Optional<Movie> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_BY_ID)
         ) {
             ps.setInt(1, id);

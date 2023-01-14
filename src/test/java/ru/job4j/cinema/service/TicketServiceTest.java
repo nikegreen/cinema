@@ -5,7 +5,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import ru.job4j.cinema.Main;
+import ru.job4j.cinema.configuration.DataSourceConfiguration;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.model.User;
@@ -20,8 +22,11 @@ class TicketServiceTest {
     private static BasicDataSource dataSource;
 
     @BeforeAll
-    public static void initConnection() {
-        dataSource = new Main().loadPool();
+    public static void initConnection(@Value("${jdbc.driver}") String driver,
+                                      @Value("${jdbc.url}") String url,
+                                      @Value("${jdbc.username}") String username,
+                                      @Value("${jdbc.password}") String password) {
+        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
     }
 
     @AfterAll

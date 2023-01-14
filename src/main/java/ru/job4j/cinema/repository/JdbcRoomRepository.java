@@ -17,16 +17,16 @@ public class JdbcRoomRepository implements RoomRepository {
             "INSERT INTO rooms(name) VALUES (?)";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM rooms WHERE id = ?";
 
-    private final BasicDataSource pool;
+    private final BasicDataSource dataSource;
 
-    public JdbcRoomRepository(BasicDataSource pool) {
-        this.pool = pool;
+    public JdbcRoomRepository(BasicDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
     public List<Room> findAll() {
         List<Room> rooms = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL)
         ) {
             try (ResultSet it = ps.executeQuery()) {
@@ -43,7 +43,7 @@ public class JdbcRoomRepository implements RoomRepository {
     @Override
     public Optional<Room> add(Room room) {
         Optional<Room> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(
                      SQL_ADD, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, room.getName());
@@ -63,7 +63,7 @@ public class JdbcRoomRepository implements RoomRepository {
     @Override
     public Optional<Room> findById(int id) {
         Optional<Room> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_BY_ID)
         ) {
             ps.setInt(1, id);

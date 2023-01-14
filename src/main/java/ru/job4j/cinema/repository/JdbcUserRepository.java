@@ -21,16 +21,16 @@ public class JdbcUserRepository implements UserRepository {
     private static final String SQL_FIND_BY_EMAIL_PASSWORD =
             "SELECT * FROM users WHERE email = ? AND password = ?";
 
-    private final BasicDataSource pool;
+    private final BasicDataSource dataSource;
 
-    public JdbcUserRepository(BasicDataSource pool) {
-        this.pool = pool;
+    public JdbcUserRepository(BasicDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_ALL)
         ) {
             try (ResultSet it = ps.executeQuery()) {
@@ -49,7 +49,7 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     public Optional<User> add(User user) {
         Optional<User> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(
                      SQL_ADD, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getUsername());
@@ -71,7 +71,7 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public void update(User user) {
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(
                      SQL_UPDATE, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getUsername());
@@ -88,7 +88,7 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     public Optional<User> findById(int id) {
         Optional<User> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_BY_ID)
         ) {
             ps.setInt(1, id);
@@ -106,7 +106,7 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     public Optional<User> findByEmailAndPassword(String email, String password) {
         Optional<User> result = Optional.empty();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_BY_EMAIL_PASSWORD)
         ) {
             ps.setString(1, email);

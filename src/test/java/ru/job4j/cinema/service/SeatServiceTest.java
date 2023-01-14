@@ -4,7 +4,9 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import ru.job4j.cinema.Main;
+import ru.job4j.cinema.configuration.DataSourceConfiguration;
 import ru.job4j.cinema.model.Seat;
 import ru.job4j.cinema.repository.JdbcSeatRepository;
 import java.sql.SQLException;
@@ -16,8 +18,11 @@ class SeatServiceTest {
     private static BasicDataSource dataSource;
 
     @BeforeAll
-    public static void initConnection() {
-        dataSource = new Main().loadPool();
+    public static void initConnection(@Value("${jdbc.driver}") String driver,
+                                      @Value("${jdbc.url}") String url,
+                                      @Value("${jdbc.username}") String username,
+                                      @Value("${jdbc.password}") String password) {
+        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
     }
 
     @AfterAll

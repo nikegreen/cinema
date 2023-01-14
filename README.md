@@ -33,7 +33,7 @@
 - JUnit 5,
 - assertj,
 - mockito, 
-- liquibase 3.6.2, 
+- liquibase 4.15.0, 
 - h2database 2.1.214,
 - Maven 3.8,
 - thymeleaf,

@@ -1,9 +1,8 @@
 package ru.job4j.cinema.model;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class Room implements Serializable {
+public class Room {
     private int id;
     private String name;
 

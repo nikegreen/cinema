@@ -16,10 +16,10 @@ public class JdbcSeatRepository implements SeatRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcSeatRepository.class);
     private static final String SQL_FIND_BY_ROOM_ID_AND_ROW =
             "SELECT * FROM seats WHERE room_id = ? and pos_row = ? ORDER BY (id, pos_row, cell)";
-    private final BasicDataSource pool;
+    private final BasicDataSource dataSource;
 
-    public JdbcSeatRepository(BasicDataSource pool) {
-        this.pool = pool;
+    public JdbcSeatRepository(BasicDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class JdbcSeatRepository implements SeatRepository {
     @Override
     public List<Seat> getByRoomIdAndRow(int roomId, int rowIndex) {
         List<Seat> result = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
+        try (Connection cn = dataSource.getConnection();
              PreparedStatement ps =  cn.prepareStatement(SQL_FIND_BY_ROOM_ID_AND_ROW)
         ) {
             ps.setInt(1, roomId);

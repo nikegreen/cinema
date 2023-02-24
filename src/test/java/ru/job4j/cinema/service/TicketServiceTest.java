@@ -5,7 +5,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import ru.job4j.cinema.Main;
 import ru.job4j.cinema.configuration.DataSourceConfiguration;
 import ru.job4j.cinema.model.Session;
@@ -18,21 +21,28 @@ import java.time.LocalDateTime;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@SpringBootTest(classes = {JdbcSessionRepository.class, JdbcRoomRepository.class, JdbcMovieRepository.class,
+        SessionService.class, RoomService.class, MovieService.class})
+@Import({DataSourceConfiguration.class, SessionService.class})
 class TicketServiceTest {
-    private static BasicDataSource dataSource;
+    @Autowired
+    private BasicDataSource dataSource;
 
-    @BeforeAll
-    public static void initConnection(@Value("${jdbc.driver}") String driver,
-                                      @Value("${jdbc.url}") String url,
-                                      @Value("${jdbc.username}") String username,
-                                      @Value("${jdbc.password}") String password) {
-        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
-    }
+    @Autowired
+    private SessionService sessionService;
 
-    @AfterAll
-    public static void closeConnection() throws SQLException {
-        dataSource.close();
-    }
+//    @BeforeAll
+//    public static void initConnection(@Value("${jdbc.driver}") String driver,
+//                                      @Value("${jdbc.url}") String url,
+//                                      @Value("${jdbc.username}") String username,
+//                                      @Value("${jdbc.password}") String password) {
+//        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
+//    }
+//
+//    @AfterAll
+//    public static void closeConnection() throws SQLException {
+//        dataSource.close();
+//    }
 
     @AfterEach
     public void wipeTable() throws SQLException {
@@ -45,23 +55,23 @@ class TicketServiceTest {
 
     @Test
     public void whenCreateTicketAndFindById() {
-        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
-        assertThat(movieRepository).isNotNull();
-        MovieService movieService = new MovieService(movieRepository);
-        assertThat(movieService).isNotNull();
-
-        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
-        assertThat(roomRepository).isNotNull();
-        RoomService roomService = new RoomService(roomRepository);
-        assertThat(roomService).isNotNull();
-
-        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
-        assertThat(sessionRepository).isNotNull();
-        SessionService sessionService = new SessionService(
-                sessionRepository,
-                movieService,
-                roomService
-        );
+//        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
+//        assertThat(movieRepository).isNotNull();
+//        MovieService movieService = new MovieService(movieRepository);
+//        assertThat(movieService).isNotNull();
+//
+//        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
+//        assertThat(roomRepository).isNotNull();
+//        RoomService roomService = new RoomService(roomRepository);
+//        assertThat(roomService).isNotNull();
+//
+//        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
+//        assertThat(sessionRepository).isNotNull();
+//        SessionService sessionService = new SessionService(
+//                sessionRepository,
+//                movieService,
+//                roomService
+//        );
         Session session = sessionService.findById(1).orElse(null);
         assertThat(session).isNotNull();
         assertThat(session.getId()).isEqualTo(1);
@@ -98,23 +108,23 @@ class TicketServiceTest {
 
     @Test
     public void whenCreate2TicketAndFindById() {
-        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
-        assertThat(movieRepository).isNotNull();
-        MovieService movieService = new MovieService(movieRepository);
-        assertThat(movieService).isNotNull();
-
-        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
-        assertThat(roomRepository).isNotNull();
-        RoomService roomService = new RoomService(roomRepository);
-        assertThat(roomService).isNotNull();
-
-        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
-        assertThat(sessionRepository).isNotNull();
-        SessionService sessionService = new SessionService(
-                sessionRepository,
-                movieService,
-                roomService
-        );
+//        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
+//        assertThat(movieRepository).isNotNull();
+//        MovieService movieService = new MovieService(movieRepository);
+//        assertThat(movieService).isNotNull();
+//
+//        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
+//        assertThat(roomRepository).isNotNull();
+//        RoomService roomService = new RoomService(roomRepository);
+//        assertThat(roomService).isNotNull();
+//
+//        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
+//        assertThat(sessionRepository).isNotNull();
+//        SessionService sessionService = new SessionService(
+//                sessionRepository,
+//                movieService,
+//                roomService
+//        );
         Session session = sessionService.findById(1).orElse(null);
         assertThat(session).isNotNull();
         assertThat(session.getId()).isEqualTo(1);
@@ -174,23 +184,23 @@ class TicketServiceTest {
 
     @Test
     public void whenCreate2TicketAndFindAllBySession() {
-        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
-        assertThat(movieRepository).isNotNull();
-        MovieService movieService = new MovieService(movieRepository);
-        assertThat(movieService).isNotNull();
-
-        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
-        assertThat(roomRepository).isNotNull();
-        RoomService roomService = new RoomService(roomRepository);
-        assertThat(roomService).isNotNull();
-
-        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
-        assertThat(sessionRepository).isNotNull();
-        SessionService sessionService = new SessionService(
-                sessionRepository,
-                movieService,
-                roomService
-        );
+//        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
+//        assertThat(movieRepository).isNotNull();
+//        MovieService movieService = new MovieService(movieRepository);
+//        assertThat(movieService).isNotNull();
+//
+//        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
+//        assertThat(roomRepository).isNotNull();
+//        RoomService roomService = new RoomService(roomRepository);
+//        assertThat(roomService).isNotNull();
+//
+//        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
+//        assertThat(sessionRepository).isNotNull();
+//        SessionService sessionService = new SessionService(
+//                sessionRepository,
+//                movieService,
+//                roomService
+//        );
         Session session = sessionService.findById(1).orElse(null);
         assertThat(session).isNotNull();
         assertThat(session.getId()).isEqualTo(1);
@@ -254,23 +264,23 @@ class TicketServiceTest {
 
     @Test
     public void whenCreate2TicketAndFindAllByUser() {
-        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
-        assertThat(movieRepository).isNotNull();
-        MovieService movieService = new MovieService(movieRepository);
-        assertThat(movieService).isNotNull();
-
-        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
-        assertThat(roomRepository).isNotNull();
-        RoomService roomService = new RoomService(roomRepository);
-        assertThat(roomService).isNotNull();
-
-        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
-        assertThat(sessionRepository).isNotNull();
-        SessionService sessionService = new SessionService(
-                sessionRepository,
-                movieService,
-                roomService
-        );
+//        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
+//        assertThat(movieRepository).isNotNull();
+//        MovieService movieService = new MovieService(movieRepository);
+//        assertThat(movieService).isNotNull();
+//
+//        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
+//        assertThat(roomRepository).isNotNull();
+//        RoomService roomService = new RoomService(roomRepository);
+//        assertThat(roomService).isNotNull();
+//
+//        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
+//        assertThat(sessionRepository).isNotNull();
+//        SessionService sessionService = new SessionService(
+//                sessionRepository,
+//                movieService,
+//                roomService
+//        );
         Session session = sessionService.findById(1).orElse(null);
         assertThat(session).isNotNull();
         assertThat(session.getId()).isEqualTo(1);
@@ -338,23 +348,23 @@ class TicketServiceTest {
 
     @Test
     public void whenCreate2TicketAndFindAllBySessionAndUser() {
-        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
-        assertThat(movieRepository).isNotNull();
-        MovieService movieService = new MovieService(movieRepository);
-        assertThat(movieService).isNotNull();
-
-        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
-        assertThat(roomRepository).isNotNull();
-        RoomService roomService = new RoomService(roomRepository);
-        assertThat(roomService).isNotNull();
-
-        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
-        assertThat(sessionRepository).isNotNull();
-        SessionService sessionService = new SessionService(
-                sessionRepository,
-                movieService,
-                roomService
-        );
+//        MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
+//        assertThat(movieRepository).isNotNull();
+//        MovieService movieService = new MovieService(movieRepository);
+//        assertThat(movieService).isNotNull();
+//
+//        JdbcRoomRepository roomRepository = new JdbcRoomRepository(dataSource);
+//        assertThat(roomRepository).isNotNull();
+//        RoomService roomService = new RoomService(roomRepository);
+//        assertThat(roomService).isNotNull();
+//
+//        JdbcSessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
+//        assertThat(sessionRepository).isNotNull();
+//        SessionService sessionService = new SessionService(
+//                sessionRepository,
+//                movieService,
+//                roomService
+//        );
         Session session = sessionService.findById(1).orElse(null);
         assertThat(session).isNotNull();
         assertThat(session.getId()).isEqualTo(1);

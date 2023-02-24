@@ -4,8 +4,11 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.jupiter.api.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import ru.job4j.cinema.*;
 import ru.job4j.cinema.configuration.DataSourceConfiguration;
@@ -14,25 +17,37 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-@Configuration
-@PropertySource("classpath:db.properties")
+//@RunWith(SpringRunner.class)
+@SpringBootTest(classes = UserRepository.class)
+@Import(DataSourceConfiguration.class)
 public class JdbcUserRepositoryTest {
-    private static BasicDataSource dataSource;
+    //@Autowired
+//    private final JdbcUserRepository userRepository;
 
-    @BeforeAll
-    public static void initConnection(
-            @Value("${jdbc.driver}") String driver,
-                                      @Value("${jdbc.url}") String url,
-                                      @Value("${jdbc.username}") String username,
-                                      @Value("${jdbc.password}") String password
-    ) {
-        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
-    }
-
-    @AfterAll
-    public static void closeConnection() throws SQLException {
-        dataSource.close();
-    }
+    @Autowired
+    private BasicDataSource dataSource;
+//    @Autowired
+//    private JdbcUserRepository store;
+//    public JdbcUserRepositoryTest(
+//            //JdbcUserRepository userRepository,
+//                                  BasicDataSource dataSource) {
+////        this.store = userRepository;
+//        this.dataSource =dataSource;
+//    }
+//    @BeforeAll
+//    public static void initConnection(
+//            @Value("${jdbc.driver}") String driver,
+//            @Value("${jdbc.url}") String url,
+//            @Value("${jdbc.username}") String username,
+//            @Value("${jdbc.password}") String password
+//    ) {
+//        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
+//    }
+//
+//    @AfterAll
+//    public void closeConnection() throws SQLException {
+//        dataSource.close();
+//    }
 
     @AfterEach
     public void wipeTable() throws SQLException {
@@ -196,5 +211,4 @@ public class JdbcUserRepositoryTest {
         user2 = store.add(user2).orElse(null);
         assertThat(user2).isNull();
     }
-
 }

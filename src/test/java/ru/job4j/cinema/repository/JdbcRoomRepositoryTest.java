@@ -5,8 +5,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import ru.job4j.cinema.Main;
 import ru.job4j.cinema.configuration.DataSourceConfiguration;
@@ -16,23 +19,24 @@ import java.sql.SQLException;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@Configuration
-@PropertySource("classpath:db.properties")
+@SpringBootTest(classes = {JdbcRoomRepository.class})
+@Import(DataSourceConfiguration.class)
 class JdbcRoomRepositoryTest {
-    private static BasicDataSource dataSource;
+    @Autowired
+    private BasicDataSource dataSource;
 
-    @BeforeAll
-    public static void initConnection(@Value("${jdbc.driver}") String driver,
-                                      @Value("${jdbc.url}") String url,
-                                      @Value("${jdbc.username}") String username,
-                                      @Value("${jdbc.password}") String password) {
-        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
-    }
-
-    @AfterAll
-    public static void closeConnection() throws SQLException {
-        dataSource.close();
-    }
+//    @BeforeAll
+//    public static void initConnection(@Value("${jdbc.driver}") String driver,
+//                                      @Value("${jdbc.url}") String url,
+//                                      @Value("${jdbc.username}") String username,
+//                                      @Value("${jdbc.password}") String password) {
+//        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
+//    }
+//
+//    @AfterAll
+//    public static void closeConnection() throws SQLException {
+//        dataSource.close();
+//    }
 
     @AfterEach
     public void wipeTable() throws SQLException {

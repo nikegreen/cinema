@@ -3,6 +3,11 @@ package ru.job4j.cinema.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * <p>Session class. Модель данных для Киносеанса</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 public class Session {
     private int id;
     private String name;

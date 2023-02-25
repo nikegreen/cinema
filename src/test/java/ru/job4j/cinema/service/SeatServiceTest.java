@@ -1,47 +1,37 @@
 package ru.job4j.cinema.service;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import ru.job4j.cinema.Main;
 import ru.job4j.cinema.configuration.DataSourceConfiguration;
 import ru.job4j.cinema.model.Seat;
 import ru.job4j.cinema.repository.JdbcSeatRepository;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+/**
+ * Проверка функций сервиса мест (сидений) в кинозалах SeatServiceTest
+ * @author nikez
+ * @version $Id: $Id
+ */
 @SpringBootTest(classes = {JdbcSeatRepository.class})
 @Import(DataSourceConfiguration.class)
 class SeatServiceTest {
     @Autowired
     private BasicDataSource dataSource;
 
-//    @BeforeAll
-//    public static void initConnection(@Value("${jdbc.driver}") String driver,
-//                                      @Value("${jdbc.url}") String url,
-//                                      @Value("${jdbc.username}") String username,
-//                                      @Value("${jdbc.password}") String password) {
-//        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
-//    }
-//
-//    @AfterAll
-//    public static void closeConnection() throws SQLException {
-//        dataSource.close();
-//    }
-
+    /**
+     * Проверка поиска мест в кинозале по идентификатору кинозала
+     */
     @Test
     public void whenGetByRoomId() {
         JdbcSeatRepository seatRepository1 = new JdbcSeatRepository(dataSource);
         assertThat(seatRepository1).isNotNull();
         SeatService seatService = new SeatService(seatRepository1);
-        assertThat(seatService);
+        assertThat(seatService).isNotNull();
 
         final List<Seat> row1 = new ArrayList<>();
         row1.add(new Seat(1, 1, 1, 1, false));
@@ -110,12 +100,16 @@ class SeatServiceTest {
         assertThat(seats).isEqualTo(testSeats);
     }
 
+    /**
+     * Проверка списка всех мест в ряду кинозала
+     * по номеру ряда и идентификатору кинозала
+     */
     @Test
     public void whenGetByRoomIdAndRow() {
         JdbcSeatRepository seatRepository1 = new JdbcSeatRepository(dataSource);
         assertThat(seatRepository1).isNotNull();
         SeatService seatService = new SeatService(seatRepository1);
-        assertThat(seatService);
+        assertThat(seatService).isNotNull();
 
         final List<Seat> row1 = new ArrayList<>();
         row1.add(new Seat(1, 1, 1, 1, false));

@@ -7,7 +7,6 @@ import ru.job4j.cinema.service.RoomService;
 import ru.job4j.cinema.service.SeatService;
 import ru.job4j.cinema.service.SessionService;
 import ru.job4j.cinema.service.TicketService;
-
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -17,7 +16,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
+/**
+ * Проверка функций контроллера SessionControllerTest
+ * @author nikez
+ * @version $Id: $Id
+ */
 class SessionControllerTest {
+    /**
+     * Проверка запроса get страница /formRow/
+     */
     @Test
     public void whenFormRow() {
         List<List<Seat>> seats = Arrays.asList(
@@ -71,6 +78,9 @@ class SessionControllerTest {
         assertThat(page).isEqualTo("row");
     }
 
+    /**
+     * Проверка запроса get страница /formСell/
+     */
     @Test
     public void whenFormCell() {
         int rowIndex = 1;

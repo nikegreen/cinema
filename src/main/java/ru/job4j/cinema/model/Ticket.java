@@ -2,6 +2,11 @@ package ru.job4j.cinema.model;
 
 import java.util.Objects;
 
+/**
+ * <p>Ticket class. Модель данных для Билета</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 public class Ticket {
     private int id;
     private Session session;

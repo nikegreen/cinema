@@ -1,15 +1,11 @@
 package ru.job4j.cinema.service;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import ru.job4j.cinema.Main;
 import ru.job4j.cinema.configuration.DataSourceConfiguration;
 import ru.job4j.cinema.model.Movie;
 import ru.job4j.cinema.repository.JdbcMovieRepository;
@@ -19,25 +15,21 @@ import java.sql.SQLException;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+/**
+ * Проверка функций сервиса кинофильмов - MovieServiceTest
+ * @author nikez
+ * @version $Id: $Id
+ */
 @SpringBootTest(classes = {JdbcMovieRepository.class})
 @Import(DataSourceConfiguration.class)
 class MovieServiceTest {
     @Autowired
     private BasicDataSource dataSource;
 
-//    @BeforeAll
-//    public static void initConnection(@Value("${jdbc.driver}") String driver,
-//                                      @Value("${jdbc.url}") String url,
-//                                      @Value("${jdbc.username}") String username,
-//                                      @Value("${jdbc.password}") String password) {
-//        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
-//    }
-//
-//    @AfterAll
-//    public static void closeConnection() throws SQLException {
-//        dataSource.close();
-//    }
-
+    /**
+     * Очистка таблиц после каждого теста
+     * @throws SQLException
+     */
     @AfterEach
     public void wipeTable() throws SQLException {
         try (PreparedStatement statement = dataSource
@@ -47,6 +39,9 @@ class MovieServiceTest {
         }
     }
 
+    /**
+     * Проверка поиска фильма по идентификатору
+     */
     @Test
     public void whenFindById() {
         MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
@@ -127,6 +122,9 @@ class MovieServiceTest {
         assertThat(movie.getFilename()).isEqualTo("images12.jpg");
     }
 
+    /**
+     * Проверка списка всех фильмов
+     */
     @Test
     public void whenFindAll() {
         MovieRepository movieRepository = new JdbcMovieRepository(dataSource);
@@ -208,6 +206,10 @@ class MovieServiceTest {
         assertThat(movie.getFilename()).isEqualTo("images12.jpg");
     }
 
+    /**
+     * Проверка добавления фильма в хранилище и
+     * поиска добавленного фильма по идентификатору
+     */
     @Test
     public void whenAddAndFindById() {
         MovieRepository movieRepository = new JdbcMovieRepository(dataSource);

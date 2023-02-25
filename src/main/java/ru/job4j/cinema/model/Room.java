@@ -2,6 +2,11 @@ package ru.job4j.cinema.model;
 
 import java.util.Objects;
 
+/**
+ * <p>Room class. Модель данных для Кинозала</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 public class Room {
     private int id;
     private String name;

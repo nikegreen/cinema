@@ -25,7 +25,7 @@ public class IndexController {
 
     /**
      * <p>index.</p>
-     *
+     * Главная страница сайта показывет киносеансы.
      * @return a {@link String} object.
      */
     @GetMapping("/index")

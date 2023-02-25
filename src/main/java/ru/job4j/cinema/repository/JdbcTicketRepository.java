@@ -33,6 +33,11 @@ public class JdbcTicketRepository implements TicketRepository {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Список билетов купленных на киносеанс
+     * @param sessionId идентификатор киносеана
+     * @return тип {@link java.util.List<ru.job4j.cinema.model.Ticket>} список всех Билетов
+     */
     @Override
     public List<Ticket> findAllBySession(int sessionId) {
         List<Ticket> tickets = new ArrayList<>();
@@ -53,6 +58,13 @@ public class JdbcTicketRepository implements TicketRepository {
         return tickets;
     }
 
+    /**
+     * Добавить Билет в хранилище
+     * @param ticket тип {@link ru.job4j.cinema.model.Room} добавляемый Билет
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Ticket>} результат добавления:
+     * Optional.Empty - Билет не добавлен иначе
+     * Optional<Ticket> Билет с новым идентификатором.
+     */
     @Override
     public Optional<Ticket> add(Ticket ticket) {
         Optional<Ticket> result = Optional.empty();
@@ -76,6 +88,13 @@ public class JdbcTicketRepository implements TicketRepository {
         return result;
     }
 
+    /**
+     * Поиск Билета по идентификатору
+     * @param id - идентификатор Билета
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Ticket>} результат поиска
+     * Optional.Empty - Билет не найден иначе
+     * Optional<Ticket> найденный Билет.
+     */
     @Override
     public Optional<Ticket> findById(int id) {
         Optional<Ticket> result = Optional.empty();
@@ -94,6 +113,11 @@ public class JdbcTicketRepository implements TicketRepository {
         return result;
     }
 
+    /**
+     * Все билеты купленные пользователем
+     * @param userId - идентификатор пользователя
+     * @return тип {@link java.util.List<ru.job4j.cinema.model.Ticket>} список всех Билетов
+     */
     @Override
     public List<Ticket> findAllByUser(int userId) {
         List<Ticket> tickets = new ArrayList<>();
@@ -114,6 +138,12 @@ public class JdbcTicketRepository implements TicketRepository {
         return tickets;
     }
 
+    /**
+     * Все билеты купленные пользователем на выбранный киносеанс
+     * @param sessionId - идентификатор Киносеанса
+     * @param userId - идентификатор пользователя
+     * @return тип {@link java.util.List<ru.job4j.cinema.model.Ticket>} список всех Билетов
+     */
     @Override
     public List<Ticket> findAllBySessionAndUser(int sessionId, int userId) {
         List<Ticket> tickets = new ArrayList<>();
@@ -137,6 +167,12 @@ public class JdbcTicketRepository implements TicketRepository {
         return tickets;
     }
 
+    /**
+     * Чтение Билета из БД
+     * @param it - итератор результата SQL запроса из БД
+     * @return тип {@link ru.job4j.cinema.model.Ticket} результат Билет из БД
+     * @throws SQLException
+     */
     private Ticket createTicket(ResultSet it) throws SQLException {
         return new Ticket(
                 it.getInt("id"),

@@ -1,17 +1,11 @@
 package ru.job4j.cinema.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import ru.job4j.cinema.Main;
 import ru.job4j.cinema.configuration.DataSourceConfiguration;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
@@ -22,26 +16,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
+/**
+ * Проверка функций хранилища JdbcTicketRepository
+ * @author nikez
+ * @version $Id: $Id
+ */
 @SpringBootTest(classes = {JdbcSessionRepository.class, JdbcTicketRepository.class, JdbcUserRepository.class})
 @Import(DataSourceConfiguration.class)
 class JdbcTicketRepositoryTest {
     @Autowired
     private BasicDataSource dataSource;
 
-//    @BeforeAll
-//    public static void initConnection(@Value("${jdbc.driver}") String driver,
-//                                      @Value("${jdbc.url}") String url,
-//                                      @Value("${jdbc.username}") String username,
-//                                      @Value("${jdbc.password}") String password) {
-//        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
-//    }
-
-//    @AfterAll
-//    public static void closeConnection() throws SQLException {
-//        dataSource.close();
-//    }
-
+    /**
+     * Очистка таблиц после каждого теста
+     * @throws SQLException
+     */
     @AfterEach
     public void wipeTable() throws SQLException {
         try (PreparedStatement statement = dataSource
@@ -51,6 +40,10 @@ class JdbcTicketRepositoryTest {
         }
     }
 
+    /**
+     * Проверка добавления билета в хранилище и
+     * поиска добавленного билета по идентификатору
+     */
     @Test
     public void whenCreateTicketAndFindById() {
         SessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
@@ -75,6 +68,10 @@ class JdbcTicketRepositoryTest {
         assertThat(ticket1.getSession()).isEqualTo(ticket.getSession());
     }
 
+    /**
+     * Проверка добавления 2х билетов в хранилище и
+     * поиска добавленных билетов по идентификатору
+     */
     @Test
     public void whenCreate2TicketAndFindById() {
         SessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
@@ -122,6 +119,10 @@ class JdbcTicketRepositoryTest {
         assertThat(ticketInDb3.getUser()).isEqualTo(ticket1.getUser());
     }
 
+    /**
+     * Проверка добавления 2х билетов в хранилище и
+     * поиска всех билетов по идентификатору киносеанса
+     */
     @Test
     public void whenCreate2TicketAndFindAllBySession() {
         SessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
@@ -173,6 +174,10 @@ class JdbcTicketRepositoryTest {
         assertThat(ticketInDb1.getUser()).isEqualTo(ticket1.getUser());
     }
 
+    /**
+     * Проверка добавления 2х билетов в хранилище и
+     * поиска всех билетов по идентификатору пользователя
+     */
     @Test
     public void whenCreate2TicketAndFindAllByUser() {
         SessionRepository sessionRepository = new JdbcSessionRepository(dataSource);
@@ -228,6 +233,11 @@ class JdbcTicketRepositoryTest {
         assertThat(ticketInDb1.getUser()).isEqualTo(ticket1.getUser());
     }
 
+    /**
+     * Проверка добавления 2х билетов в хранилище и
+     * поиска всех билетов по идентификатору киносеанса
+     * и  по идентификатору пользователя
+     */
     @Test
     public void whenCreate2TicketAndFindAllBySessionAndUser() {
         SessionRepository sessionRepository = new JdbcSessionRepository(dataSource);

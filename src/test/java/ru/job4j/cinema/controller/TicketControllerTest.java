@@ -16,7 +16,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
+/**
+ * Проверка функций контроллера SessionControllerTest
+ * @author nikez
+ * @version $Id: $Id
+ */
 class TicketControllerTest {
+    /**
+     * Проверка запроса get страница /formBuy/
+     */
     @Test
     public void whenFormBuy() {
         int rowIndex = 1;
@@ -72,6 +80,9 @@ class TicketControllerTest {
         assertThat(page).isEqualTo("buy");
     }
 
+    /**
+     * Проверка запроса post страница /createTicket
+     */
     @Test
     public void whenCreateTicket() {
         int rowIndex = 1;
@@ -140,6 +151,9 @@ class TicketControllerTest {
         assertThat(page).isEqualTo("redirect:/formTickets");
     }
 
+    /**
+     * Проверка запроса get страница /formTickets
+     */
     @Test
     public void whenFormTickets() {
         int rowIndex = 1;
@@ -194,6 +208,9 @@ class TicketControllerTest {
         assertThat(page).isEqualTo("tickets");
     }
 
+    /**
+     * Проверка запроса get страница /formBuyFail
+     */
     @Test
     public void whenBuyFail() {
         User user = new User(

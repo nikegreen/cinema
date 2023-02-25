@@ -15,7 +15,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
+/**
+ * Проверка функций контроллера IndexControllerTest
+ * @author nikez
+ * @version $Id: $Id
+ */
 class IndexControllerTest {
+    /**
+     * Проверка запроса get страница /index
+     */
     @Test
     public void whenIndex() {
         Room room1 = new Room(1, "litle");

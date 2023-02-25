@@ -15,6 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
+/**
+ * <p>TicketController class. Покупка билета</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 @ThreadSafe
 @Controller
 public class UserController {
@@ -24,12 +29,32 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * <p>Окно регистрации пользователя</p>
+     * @param model - объект передаёт данные в страницу
+     * @return - тип {@link java.lang.String} содержит: "registration";
+     */
     @GetMapping("/formRegistration")
     public String formRegistration(Model model) {
         model.addAttribute("user", new User(0, "Гость", "password", "email", "+79999999999"));
         return "registration";
     }
 
+    /**
+     * <p>Данные пользователя из окна регистрации пользователя</p>
+     * @param user тип {@link ru.job4j.cinema.model.User} содержит:
+     *             - имя
+     *             - адрес электронной почты
+     *             - номер телефона пользователя
+     *             - пароль пользователя.
+     * @return - тип {@link java.lang.String} содержит строку:
+     * redirect:/success?username=[Username]&email=[Email]&phone=[Phone] - OK
+     * redirect:/fail?username=[Username]&email=[Email]&phone=[Phone] - Ошибка регистрации.
+     * Вместо строк:
+     * [Username] - будет имя пользователя введенное в окне регистрации,
+     * [Email] - электронная почта пользователя,
+     * [Phone] - номер телефона пользователя.
+     */
     @PostMapping("/registration")
     public String registration(@ModelAttribute User user) {
         Optional<User> regUser = userService.add(user);
@@ -44,6 +69,15 @@ public class UserController {
                 + "&phone=" + user.getPhone();
     }
 
+    /**
+     * <p>Страница об успешной регистрации</p>
+     * @param model - объект передаёт данные в страницу
+     * @param session - объект http сессии
+     * @param username - тип {@link java.lang.String} содержит имя пользователя
+     * @param email - тип {@link java.lang.String} содержит адрес электронной почты
+     * @param phone - тип {@link java.lang.String} содержит номер телефона пользователя
+     * @return - тип {@link java.lang.String} содержит строку: "success";
+     */
     @GetMapping("/success")
     public String success(Model model, HttpSession session,
                           @RequestParam(name = "username") String username,
@@ -55,6 +89,15 @@ public class UserController {
         return "success";
     }
 
+    /**
+     * <p>Страница об ошибке регистрации</p>
+     * @param model - объект передаёт данные в страницу
+     * @param session - объект http сессии
+     * @param username - тип {@link java.lang.String} содержит имя пользователя
+     * @param email - тип {@link java.lang.String} содержит адрес электронной почты
+     * @param phone - тип {@link java.lang.String} содержит номер телефона пользователя
+     * @return - тип {@link java.lang.String} содержит строку: "fail";
+     */
     @GetMapping("/fail")
     public String fail(Model model,
                        HttpSession session,
@@ -68,6 +111,13 @@ public class UserController {
         return "fail";
     }
 
+    /**
+     * <p>Страница авторизации пользователя (логин)</p>
+     * @param model - объект передаёт данные в страницу
+     * @param session - объект http сессии
+     * @param fail - статус предыдущей авторизации
+     * @return - тип {@link java.lang.String} содержит строку: "login";
+     */
     @GetMapping("/formLogin")
     public String formLogin(Model model,
                             HttpSession session,
@@ -77,6 +127,16 @@ public class UserController {
         return "login";
     }
 
+    /**
+     * <p>Данные пользователя из окна авторизации пользователя (логин)</p>
+     * @param user тип {@link ru.job4j.cinema.model.User} содержит:
+     *             - адрес электронной почты
+     *             - пароль пользователя.
+     * @param req тип {@link javax.servlet.http.HttpServletRequest}
+     * @return - тип {@link java.lang.String} содержит строку:
+     * "redirect:/index" - OK;
+     * "redirect:/formLogin?fail=true" - ошибка;
+     */
     @PostMapping("/login")
     public String login(@ModelAttribute User user, HttpServletRequest req) {
         Optional<User> userDb = userService.findUserByEmailAndPassword(
@@ -90,6 +150,11 @@ public class UserController {
         return "redirect:/index";
     }
 
+    /**
+     * <p>Страница убрать авторизацию пользователя (логаут)</p>
+     * @param session - объект http сессии
+     * @return - тип {@link java.lang.String} содержит строку: "redirect:/formLogin";
+     */
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

@@ -1,42 +1,30 @@
 package ru.job4j.cinema.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import ru.job4j.cinema.Main;
 import ru.job4j.cinema.configuration.DataSourceConfiguration;
 import ru.job4j.cinema.model.Seat;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+/**
+ * Проверка функций хранилища JdbcSeatRepository
+ * @author nikez
+ * @version $Id: $Id
+ */
 @SpringBootTest(classes = {JdbcSeatRepository.class})
 @Import(DataSourceConfiguration.class)
 class JdbcSeatRepositoryTest {
     @Autowired
     private BasicDataSource dataSource;
 
-//    @BeforeAll
-//    public static void initConnection(@Value("${jdbc.driver}") String driver,
-//                                      @Value("${jdbc.url}") String url,
-//                                      @Value("${jdbc.username}") String username,
-//                                      @Value("${jdbc.password}") String password) {
-//        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
-//    }
-//
-//    @AfterAll
-//    public static void closeConnection() throws SQLException {
-//        dataSource.close();
-//    }
-
+    /**
+     * Проверка поиска мест в кинозале по идентификатору кинозала
+     */
     @Test
     public void whenGetByRoomId() {
         SeatRepository seatRepository = new JdbcSeatRepository(dataSource);
@@ -107,6 +95,10 @@ class JdbcSeatRepositoryTest {
         assertThat(seats).isEqualTo(testSeats);
     }
 
+    /**
+     * Проверка списка всех мест в ряду кинозала
+     * по номеру ряда и идентификатору кинозала
+     */
     @Test
     public void whenGetByRoomIdAndRow() {
         SeatRepository seatRepository = new JdbcSeatRepository(dataSource);

@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * <p>JdbcMovieRepository class. Репозиторий для Кинофильмов в хранилище JDBC</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 @Repository
 public class JdbcMovieRepository implements MovieRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcRoomRepository.class);
@@ -26,6 +31,9 @@ public class JdbcMovieRepository implements MovieRepository {
         this.dataSource = dataSource;
     }
 
+    /**
+     * @return тип {@link java.util.List<ru.job4j.cinema.model.Movie>} список всех фильмов
+     */
     @Override
     public List<Movie> findAll() {
         List<Movie> movies = new ArrayList<>();
@@ -43,6 +51,13 @@ public class JdbcMovieRepository implements MovieRepository {
         return movies;
     }
 
+    /**
+     * Добавить фильм в хранилище
+     * @param movie тип {@link ru.job4j.cinema.model.Movie} добавляемый фильм
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Movie>} результат добавления:
+     * Optional.Empty - не добавлен иначе
+     * Optional<Movie> фильм с новым идентификатором фильма.
+     */
     @Override
     public Optional<Movie> add(Movie movie) {
         Optional<Movie> result = Optional.empty();
@@ -64,6 +79,13 @@ public class JdbcMovieRepository implements MovieRepository {
         return result;
     }
 
+    /**
+     * Поиск фильма по идентификатору
+     * @param id - идентификатор фильма
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Movie>} результат поиска
+     * Optional.Empty - не найден иначе
+     * Optional<Movie> найденный фильм.
+     */
     @Override
     public Optional<Movie> findById(int id) {
         Optional<Movie> result = Optional.empty();
@@ -82,6 +104,12 @@ public class JdbcMovieRepository implements MovieRepository {
         return result;
     }
 
+    /**
+     * Чтение Кинофильма из БД
+     * @param it - итератор результата SQL запроса из БД
+     * @return тип {@link ru.job4j.cinema.model.Movie} результат Кинофильм из БД
+     * @throws SQLException
+     */
     private Movie createMovie(ResultSet it) throws SQLException {
         return new Movie(
                 it.getInt("id"),

@@ -8,6 +8,11 @@ import ru.job4j.cinema.repository.SessionRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * <p>SessionService class. Сервис для Киносеансов</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 @ThreadSafe
 @Service
 public class SessionService {
@@ -23,6 +28,9 @@ public class SessionService {
         this.roomService = roomService;
     }
 
+    /**
+     * @return тип {@link java.util.List<ru.job4j.cinema.model.Session>} список всех Киносеансов
+     */
     public List<Session> findAll() {
         List<Session> list = store.findAll();
             list.forEach(session -> {
@@ -32,10 +40,24 @@ public class SessionService {
         return list;
     }
 
+    /**
+     * Добавить Киносеанс в хранилище
+     * @param session тип {@link ru.job4j.cinema.model.Session} добавляемый Киносеанс
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Session>} результат добавления:
+     * Optional.Empty - не добавлен иначе
+     * Optional<Movie> Киносеанс с новым идентификатором Киносеанса.
+     */
     public Optional<Session> add(Session session) {
         return store.add(session);
     }
 
+    /**
+     * Поиск Киносеанса по идентификатору
+     * @param id - идентификатор Киносеанса
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Session>} результат поиска
+     * Optional.Empty - Киносеанс не найден иначе
+     * Optional<Movie> найденный Киносеанс.
+     */
     public Optional<Session> findById(int id) {
         Session session = store.findById(id).orElse(null);
         session.setMovie(movieService.findById(session.getMovie().getId()).orElse(null));

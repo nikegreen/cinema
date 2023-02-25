@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Optional;
 import java.sql.*;
 
+/**
+ * <p>JdbcUserRepository class. Репозиторий для Пользователей (хранилище JDBC)</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 @Repository
 public class JdbcUserRepository implements UserRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcUserRepository.class);
@@ -27,6 +32,9 @@ public class JdbcUserRepository implements UserRepository {
         this.dataSource = dataSource;
     }
 
+    /**
+     * @return тип {@link java.util.List<ru.job4j.cinema.model.Room>} список всех Пользователей
+     */
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
@@ -46,6 +54,13 @@ public class JdbcUserRepository implements UserRepository {
         return users;
     }
 
+    /**
+     * Добавить Пользователя в хранилище
+     * @param user тип {@link ru.job4j.cinema.model.User} добавляемый Пользователь
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.User>} результат добавления:
+     * Optional.Empty - Пользователь не добавлен иначе
+     * Optional<User> Пользователь с новым идентификатором.
+     */
     @Override
     public Optional<User> add(User user) {
         Optional<User> result = Optional.empty();
@@ -69,6 +84,10 @@ public class JdbcUserRepository implements UserRepository {
         return result;
     }
 
+    /**
+     * Обновить хранилище данными из:
+     * @param user - Пользователь
+     */
     @Override
     public void update(User user) {
         try (Connection cn = dataSource.getConnection();
@@ -85,6 +104,13 @@ public class JdbcUserRepository implements UserRepository {
         }
     }
 
+    /**
+     * Поиск Пользователя по идентификатору
+     * @param id - идентификатор Пользователя
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.User>} результат поиска
+     * Optional.Empty - не найден иначе
+     * Optional<User> найденный Пользователь.
+     */
     @Override
     public Optional<User> findById(int id) {
         Optional<User> result = Optional.empty();
@@ -103,6 +129,14 @@ public class JdbcUserRepository implements UserRepository {
         return result;
     }
 
+    /**
+     * Поиск Пользователя по:
+     * @param email - адрес электронной почты Пользователя
+     * @param password - пароль Пользователя
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.User>} результат поиска
+     * Optional.Empty - не найден иначе
+     * Optional<User> найденный Пользователь.
+     */
     @Override
     public Optional<User> findByEmailAndPassword(String email, String password) {
         Optional<User> result = Optional.empty();
@@ -125,6 +159,12 @@ public class JdbcUserRepository implements UserRepository {
         return result;
     }
 
+    /**
+     * Чтение пользователя из БД
+     * @param it - итератор результата SQL запроса из БД
+     * @return тип {@link ru.job4j.cinema.model.Ticket} результат пользователь из БД
+     * @throws SQLException
+     */
     private User createUser(ResultSet it) throws SQLException {
         return new User(
                 it.getInt("id"),

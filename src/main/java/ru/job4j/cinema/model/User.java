@@ -2,6 +2,11 @@ package ru.job4j.cinema.model;
 
 import java.util.Objects;
 
+/**
+ * <p>User class. Модель данных для Пользователя сайта</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 public class User {
     private int id;
     private String username;

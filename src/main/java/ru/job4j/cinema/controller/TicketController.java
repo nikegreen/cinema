@@ -18,6 +18,11 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * <p>TicketController class. Покупка билета</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 @ThreadSafe
 @Controller
 public class TicketController {
@@ -34,6 +39,14 @@ public class TicketController {
         this.seatService = seatService;
     }
 
+    /**
+     * <p>Окно покупки билета</p>
+     * @param model - объект передаёт данные в страницу
+     * @param httpSession - объект http сессии
+     * @param cellIndex - место в ряду
+     * @return - тип {@link java.lang.String} содержит:
+     *  "buy" - OK
+     */
     @GetMapping("/formBuy/{cellIndex}")
     public String formBuy(
             Model model,
@@ -53,6 +66,14 @@ public class TicketController {
         return "buy";
     }
 
+    /**
+     * <p>Обработка покупки билета</p>
+     * @param httpSession - объект http сессии
+     * @return - тип {@link java.lang.String} содержит:
+     *  "redirect:/index" - билет не куплен
+     *  "redirect:/formBuyFail" - место занято или ошибка БД;
+     *  "redirect:/formTickets" - билет куплен;
+     */
     @PostMapping("/createTicket")
     public String createTicket(HttpSession httpSession) {
         Session cinemaSession = (Session) httpSession.getAttribute("cinemasession");
@@ -77,6 +98,12 @@ public class TicketController {
         return "redirect:/formBuyFail";
     }
 
+    /**
+     * <p>Форма с купленными билетами для пользователя (из http сессии)</p>
+     * @param model - объект передаёт данные в страницу
+     * @param httpSession - объект http сессии
+     * @return - тип {@link java.lang.String} содержит: "tickets";
+     */
     @GetMapping("/formTickets")
     public String formTickets(Model model, HttpSession httpSession) {
         model = ModelSet.fromSession(model, httpSession);
@@ -96,6 +123,13 @@ public class TicketController {
         return "tickets";
     }
 
+    /**
+     * <p>Окно сообщающая об неудачной покупке билета</p>
+     * @param model - объект передаёт данные в страницу
+     * @param session - объект http сессии
+     * @return - тип {@link java.lang.String} содержит: "tickets";
+     * @return
+     */
     @GetMapping("/formBuyFail")
     public String formBuyFail(Model model, HttpSession session) {
         model = ModelSet.fromSession(model, session);

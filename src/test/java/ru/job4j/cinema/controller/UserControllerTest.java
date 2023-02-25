@@ -10,7 +10,16 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
+/**
+ * Проверка функций контроллера SessionControllerTest
+ * @author nikez
+ * @version $Id: $Id
+ */
 class UserControllerTest {
+    /**
+     * Проверка запроса get страница /formRegistration/
+     * страница регистрации пользователя
+     */
     @Test
     public void whenFormRegistration() {
         User user = new User(0, "Гость", "password", "email", "+79999999999");
@@ -22,6 +31,10 @@ class UserControllerTest {
         assertThat(page).isEqualTo("registration");
     }
 
+    /**
+     * Проверка запроса post страница /registration/
+     * страница регистрации пользователя статус с успешной регистрацией
+     */
     @Test
     public void whenRegistrationReturnSuccess() {
         User user = new User(0, "user1", "password", "email1", "+79999999991");
@@ -37,6 +50,10 @@ class UserControllerTest {
         );
     }
 
+    /**
+     * Проверка запроса post страница /registration/
+     * страница регистрации пользователя статус с проваленной регистрацией
+     */
     @Test
     public void whenRegistrationReturnFail() {
         User user = new User(0, "user1", "password", "email1", "+79999999991");
@@ -51,6 +68,10 @@ class UserControllerTest {
         );
     }
 
+    /**
+     * Проверка запроса get страница /success
+     * страница показывает статус успешной регистрации пользователя
+     */
     @Test
     public void whenSuccess() {
         User user = new User();
@@ -70,6 +91,10 @@ class UserControllerTest {
         assertThat(page).isEqualTo("success");
     }
 
+    /**
+     * Проверка запроса get страница /fail
+     * страница показывает статус проваленной регистрации пользователя
+     */
     @Test
     public void whenFail() {
         User user = new User();
@@ -93,6 +118,11 @@ class UserControllerTest {
         assertThat(page).isEqualTo("fail");
     }
 
+    /**
+     * Проверка запроса get страница /formLogin
+     * Страница авторизации пользователя (логин)
+     * нет статуса предыдущей проваленной авторизации пользователя
+     */
     @Test
     public void whenFormLoginFailFalse() {
         User user = new User();
@@ -108,6 +138,11 @@ class UserControllerTest {
         assertThat(page).isEqualTo("login");
     }
 
+    /**
+     * Проверка запроса get страница /formLogin?fail=true
+     * Страница авторизации пользователя (логин)
+     * статус предыдущей проваленной авторизации пользователя
+     */
     @Test
     public void whenFormLoginFailTrue() {
         User user = new User();
@@ -123,6 +158,13 @@ class UserControllerTest {
         assertThat(page).isEqualTo("login");
     }
 
+    /**
+     * Проверка запроса post страница /login
+     * Страница авторизации пользователя (логин)
+     * данные для успешной авторизации пользователя
+     * результат:
+     * переход на главную страницу
+     */
     @Test
     public void whenLoginFailFalse() {
         User user1 = new User(0, "", "password", "email1", "");
@@ -140,6 +182,13 @@ class UserControllerTest {
         assertThat(page).isEqualTo("redirect:/index");
     }
 
+    /**
+     * Проверка запроса post страница /login
+     * Страница авторизации пользователя (логин)
+     * данные для провальной авторизации пользователя
+     * результат:
+     * переход на страницу авторизации с признаком ошибки
+     */
     @Test
     public void whenLoginFailTrue() {
         User user1 = new User(0, "", "password", "email1", "");
@@ -152,6 +201,14 @@ class UserControllerTest {
         String page = userController.login(user1, httpServletRequest);
         assertThat(page).isEqualTo("redirect:/formLogin?fail=true");
     }
+
+    /**
+     * Проверка запроса get страница /logout
+     * Страница де-авторизации пользователя (логоут)
+     * результат:
+     * очтстка Http сессии,
+     * переход на страницу авторизации
+     */
 
     @Test
     public void whenLogout() {

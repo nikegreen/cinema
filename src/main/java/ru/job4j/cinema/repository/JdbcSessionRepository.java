@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * <p>JdbcSessionRepository class. Репозиторий для Киносеансов (хранилища JDBC)</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 @Repository
 public class JdbcSessionRepository implements SessionRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcSessionRepository.class);
@@ -23,6 +28,9 @@ public class JdbcSessionRepository implements SessionRepository {
         this.dataSource = dataSource;
     }
 
+    /**
+     * @return тип {@link java.util.List<ru.job4j.cinema.model.Session>} список всех Киносеансов
+     */
     @Override
     public List<Session> findAll() {
         List<Session> sessions = new ArrayList<>();
@@ -40,6 +48,13 @@ public class JdbcSessionRepository implements SessionRepository {
         return sessions;
     }
 
+    /**
+     * Добавить Киносеанс в хранилище
+     * @param session тип {@link ru.job4j.cinema.model.Session} добавляемый Киносеанс
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Session>} результат добавления:
+     * Optional.Empty - не добавлен иначе
+     * Optional<Movie> Киносеанс с новым идентификатором Киносеанса.
+     */
     @Override
     public Optional<Session> add(Session session) {
         Optional<Session> result = Optional.empty();
@@ -63,6 +78,13 @@ public class JdbcSessionRepository implements SessionRepository {
         return result;
     }
 
+    /**
+     * Поиск Киносеанса по идентификатору
+     * @param id - идентификатор Киносеанса
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Session>} результат поиска
+     * Optional.Empty - Киносеанс не найден иначе
+     * Optional<Movie> найденный Киносеанс.
+     */
     @Override
     public Optional<Session> findById(int id) {
         Optional<Session> result = Optional.empty();
@@ -81,6 +103,12 @@ public class JdbcSessionRepository implements SessionRepository {
         return result;
     }
 
+    /**
+     * Чтение Киносеанса из БД
+     * @param it - итератор результата SQL запроса из БД
+     * @return тип {@link ru.job4j.cinema.model.Session} результат Киносеанс из БД
+     * @throws SQLException
+     */
     private Session createSession(ResultSet it) throws SQLException {
         return new Session(
                 it.getInt("id"),

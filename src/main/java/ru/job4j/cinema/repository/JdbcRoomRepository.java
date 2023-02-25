@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * <p>JdbcMovieRepository class. Репозиторий для Кинозалов в хранилище JDBC</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 @Repository
 public class JdbcRoomRepository implements RoomRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcRoomRepository.class);
@@ -23,6 +28,9 @@ public class JdbcRoomRepository implements RoomRepository {
         this.dataSource = dataSource;
     }
 
+    /**
+     * @return тип {@link java.util.List<ru.job4j.cinema.model.Room>} список всех Кинозалов
+     */
     @Override
     public List<Room> findAll() {
         List<Room> rooms = new ArrayList<>();
@@ -40,6 +48,13 @@ public class JdbcRoomRepository implements RoomRepository {
         return rooms;
     }
 
+    /**
+     * Добавить Кинозал в хранилище
+     * @param room тип {@link ru.job4j.cinema.model.Room} добавляемый Кинозал
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Room>} результат добавления:
+     * Optional.Empty - не добавлен иначе
+     * Optional<Movie> Кинозал с новым идентификатором Кинозала.
+     */
     @Override
     public Optional<Room> add(Room room) {
         Optional<Room> result = Optional.empty();
@@ -60,6 +75,13 @@ public class JdbcRoomRepository implements RoomRepository {
         return result;
     }
 
+    /**
+     * Поиск Кинозала по идентификатору
+     * @param id - идентификатор Кинозала
+     * @return тип {@link java.util.Optional<ru.job4j.cinema.model.Room>} результат поиска
+     * Optional.Empty - не найден иначе
+     * Optional<Movie> найденный Кинозал.
+     */
     @Override
     public Optional<Room> findById(int id) {
         Optional<Room> result = Optional.empty();
@@ -78,6 +100,12 @@ public class JdbcRoomRepository implements RoomRepository {
         return result;
     }
 
+    /**
+     * Чтение кинозала из БД
+     * @param it - итератор результата SQL запроса из БД
+     * @return тип {@link ru.job4j.cinema.model.Room} результат Кинозал из БД
+     * @throws SQLException
+     */
     private Room createRoom(ResultSet it) throws SQLException {
         return new Room(
                 it.getInt("id"),

@@ -15,6 +15,11 @@ import ru.job4j.cinema.util.ModelSet;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * <p>SessionController class.</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 @ThreadSafe
 @Controller
 public class SessionController {
@@ -23,6 +28,13 @@ public class SessionController {
     private final TicketService ticketService;
     private final SeatService seatService;
 
+    /**
+     * Конструктор
+     * @param sessionService - сервис Киносеансов
+     * @param roomService - сервис кинозалов
+     * @param ticketService - сервис билетов
+     * @param seatService - севис сидений/мест
+     */
     public SessionController(SessionService sessionService,
                              RoomService roomService,
                              TicketService ticketService,
@@ -33,6 +45,16 @@ public class SessionController {
         this.seatService = seatService;
     }
 
+    /**
+     * <p>Страница выбора ряда в зале</p>
+     * Выводит страницу с киносеансом, показывается зал для выбора ряда
+     * @param model - объект передаёт данные в страницу
+     * @param httpSession - объект http сессии
+     * @param sessionId - ID киносеанса
+     * @return - тип {@link java.lang.String} содержит:
+     *  "row" - OK
+     *  "redirect:/index" - error
+     */
     @GetMapping("/formRow/{sessionId}")
     public String formRow(
             Model model, HttpSession httpSession, @PathVariable("sessionId") int sessionId
@@ -53,6 +75,15 @@ public class SessionController {
         return "row";
     }
 
+    /**
+     * <p>Страница выбора места в ряду</p>
+     * @param model - объект передаёт данные в страницу
+     * @param httpSession - объект http сессии
+     * @param rowIndex - индекс ряда в кинозале
+     * @return - тип {@link java.lang.String} содержит:
+     *  "cell" - OK
+     *  "row" - error
+     */
     @GetMapping("/formCell/{rowIndex}")
     public String formCell(
             Model model,

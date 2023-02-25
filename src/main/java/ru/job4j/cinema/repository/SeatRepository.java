@@ -4,6 +4,11 @@ import ru.job4j.cinema.model.Seat;
 
 import java.util.List;
 
+/**
+ * <p>SeatRepository class. Репозиторий для Сидений (интерфейс хранилища)</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 public interface SeatRepository {
     /**
      * @param roomId - in interval from database 'cinema' table 'rooms'

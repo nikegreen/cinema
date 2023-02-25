@@ -3,52 +3,30 @@ package ru.job4j.cinema.repository;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.jupiter.api.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import ru.job4j.cinema.*;
 import ru.job4j.cinema.configuration.DataSourceConfiguration;
 import ru.job4j.cinema.model.User;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-//@RunWith(SpringRunner.class)
+/**
+ * Проверка функций хранилища UserRepository
+ * @author nikez
+ * @version $Id: $Id
+ */
 @SpringBootTest(classes = UserRepository.class)
 @Import(DataSourceConfiguration.class)
 public class JdbcUserRepositoryTest {
-    //@Autowired
-//    private final JdbcUserRepository userRepository;
-
     @Autowired
     private BasicDataSource dataSource;
-//    @Autowired
-//    private JdbcUserRepository store;
-//    public JdbcUserRepositoryTest(
-//            //JdbcUserRepository userRepository,
-//                                  BasicDataSource dataSource) {
-////        this.store = userRepository;
-//        this.dataSource =dataSource;
-//    }
-//    @BeforeAll
-//    public static void initConnection(
-//            @Value("${jdbc.driver}") String driver,
-//            @Value("${jdbc.url}") String url,
-//            @Value("${jdbc.username}") String username,
-//            @Value("${jdbc.password}") String password
-//    ) {
-//        dataSource = new DataSourceConfiguration().loadPool(driver, url, username, password);
-//    }
-//
-//    @AfterAll
-//    public void closeConnection() throws SQLException {
-//        dataSource.close();
-//    }
 
+    /**
+     * Очистка таблиц после каждого теста
+     * @throws SQLException
+     */
     @AfterEach
     public void wipeTable() throws SQLException {
         try (PreparedStatement statement = dataSource
@@ -58,6 +36,10 @@ public class JdbcUserRepositoryTest {
         }
     }
 
+    /**
+     * Проверка добавления пользователя в хранилище и
+     * поиска добавленного пользователя по идентификатору
+     */
     @Test
     public void whenCreateUserAndFindById() {
         UserRepository store = new JdbcUserRepository(dataSource);
@@ -71,6 +53,10 @@ public class JdbcUserRepositoryTest {
         assertThat(userInDb.getPhone()).isEqualTo(user.getPhone());
     }
 
+    /**
+     * Проверка добавления 2х пользователей в хранилище и
+     * поиска добавленных пользователей по идентификатору
+     */
     @Test
     public void whenCreate2UserAndFindById() {
         UserRepository store = new JdbcUserRepository(dataSource);
@@ -93,6 +79,10 @@ public class JdbcUserRepositoryTest {
         assertThat(userInDb2.getPhone()).isEqualTo(user2.getPhone());
     }
 
+    /**
+     * Проверка добавления 2х пользователей в хранилище и
+     * поиска всех пользователей
+     */
     @Test
     public void whenCreate2UserAndFindAll() {
         UserRepository store = new JdbcUserRepository(dataSource);
@@ -116,6 +106,10 @@ public class JdbcUserRepositoryTest {
         assertThat(userInDb2.getPhone()).isEqualTo(user2.getPhone());
     }
 
+    /**
+     * Проверка добавления 2х пользователей
+     * с одинаковыми номерами телефонов в хранилище
+     */
     @Test
     public void whenCreate2UserEqualPhoneAndFindAll() {
         UserRepository store = new JdbcUserRepository(dataSource);
@@ -135,6 +129,10 @@ public class JdbcUserRepositoryTest {
         assertThat(list.size()).isEqualTo(++count);
     }
 
+    /**
+     * Проверка добавления 2х пользователей
+     * с одинаковыми адресами электронной почты в хранилище и
+     */
     @Test
     public void whenCreate2UserEqualEmailAndFindAll() {
         UserRepository store = new JdbcUserRepository(dataSource);
@@ -154,6 +152,11 @@ public class JdbcUserRepositoryTest {
         assertThat(list.size()).isEqualTo(++count);
     }
 
+    /**
+     * Проверка добавления 2х пользователей в хранилище и
+     * поиска добавленных пользователей по идентификатору
+     * и обновление пользователей в хранилище
+     */
     @Test
     public void whenCreate2PostAndFindByIdAndUpdate() {
         UserRepository store = new JdbcUserRepository(dataSource);
@@ -197,6 +200,10 @@ public class JdbcUserRepositoryTest {
         assertThat(userInDb2.getPhone()).isEqualTo(user2.getPhone());
     }
 
+    /**
+     * Проверка добавления 2х одинаковых пользователей в хранилище и
+     * поиска добавленных пользователей по идентификатору
+     */
     @Test
     public void whenCreate2EqualUserAndFindById() {
         UserRepository store = new JdbcUserRepository(dataSource);

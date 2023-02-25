@@ -2,6 +2,11 @@ package ru.job4j.cinema.model;
 
 import java.util.Objects;
 
+/**
+ * <p>Seat class. Модель данных для Мест в кинозале</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 public class Seat {
     private int id;
     private int roomId;

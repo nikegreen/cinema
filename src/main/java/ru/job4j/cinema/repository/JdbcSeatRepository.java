@@ -11,6 +11,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>JdbcSeatRepository class. Репозиторий для Мест в Кинозалах в хранилище JDBC</p>
+ * @author nikez
+ * @version $Id: $Id
+ */
 @Repository
 public class JdbcSeatRepository implements SeatRepository {
     private static final Logger LOGGER = Logger.getLogger(JdbcSeatRepository.class);
@@ -22,6 +27,12 @@ public class JdbcSeatRepository implements SeatRepository {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Поиск списка сидений по идентификатору Кинозала
+     * @param roomId - идентификатор Кинозала
+     * @return тип {@link java.util.List<java.util.List<ru.job4j.cinema.model.Seat>>}
+     * список мест в кинозале
+     */
     @Override
     public List<List<Seat>> getByRoomId(int roomId) {
         List<List<Seat>> result = new ArrayList<>();
@@ -35,6 +46,13 @@ public class JdbcSeatRepository implements SeatRepository {
         return result;
     }
 
+    /**
+     * Поиск списка сидений по идентификатору Кинозала
+     * @param roomId - идентификатор Кинозала
+     * @param rowIndex - номер ряда в Кинозале
+     * @return тип {@link java.util.List<ru.job4j.cinema.model.Seat>}
+     * список мест в ряду для кинозала
+     */
     @Override
     public List<Seat> getByRoomIdAndRow(int roomId, int rowIndex) {
         List<Seat> result = new ArrayList<>();
@@ -56,6 +74,12 @@ public class JdbcSeatRepository implements SeatRepository {
         return result;
     }
 
+    /**
+     * Чтение Сиденья из БД
+     * @param it - итератор результата SQL запроса из БД
+     * @return тип {@link ru.job4j.cinema.model.Room} результат - Сиденье из БД
+     * @throws SQLException
+     */
     private Seat createSeat(ResultSet it) throws SQLException {
         int cell;
         try {
